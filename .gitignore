@@ -1,0 +1,8 @@
+﻿.vs
+Debug
+packages
+x64
+Sarcophagus/Generated Files
+
+*.aps
+*.user
