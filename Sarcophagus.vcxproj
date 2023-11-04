@@ -188,4 +188,12 @@
     <Error Condition="!Exists('..\packages\Microsoft.WindowsAppSDK.1.2.221109.1\build\native\Microsoft.WindowsAppSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.WindowsAppSDK.1.2.221109.1\build\native\Microsoft.WindowsAppSDK.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
   </Target>
+  <!-- Removes the extraneous language folders from the build output -->
+  <Target Name="RemoveFoldersWithMuiFiles" AfterTargets="Build">
+    <ItemGroup>
+      <RemovingFiles Include="$(OutDir)*\*.mui" Exclude="$(OutDir)en-us\*.mui" />
+      <RemovingFolders Include="@(RemovingFiles->'%(RootDir)%(Directory)')" />
+    </ItemGroup>
+    <RemoveDir Directories="@(RemovingFolders)" />
+  </Target>
 </Project>
