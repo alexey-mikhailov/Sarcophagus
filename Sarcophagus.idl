@@ -1,5 +1,22 @@
 namespace Sarcophagus
 {
+	runtimeclass Credential : Windows.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		Credential();
+		Credential(String name, String password);
+
+		String Name;
+		String Password;
+	}
+
+	runtimeclass MainVM
+	{
+		MainVM();
+
+		Credential CredentialTemplate{ get; };
+		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
+	}
+
 	[default_interface]
 	runtimeclass MainWindow : Microsoft.UI.Xaml.Window
 	{
@@ -10,5 +27,6 @@ namespace Sarcophagus
 	runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page
 	{
 		MainPage();
-	} 
+		MainVM MainVM{ get; };
+	}
 }

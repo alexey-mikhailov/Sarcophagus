@@ -19,4 +19,17 @@ namespace winrt::Sarcophagus::implementation
 	{
 		InitializeComponent();
 	}
+
+	void MainPage::Init(Sarcophagus::MainVM const& vm)
+	{
+		_vm = vm;
+	}
+
+	void MainPage::OnEditCredential(IInspectable const&, RoutedEventArgs const&)
+	{
+	}
+
+	void MainPage::OnCopyCredential(IInspectable const&, RoutedEventArgs const&)
+	{
+	}
 }

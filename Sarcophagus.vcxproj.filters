@@ -13,11 +13,13 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="MainVM.cpp" />
     <ClCompile Include="SarcophagusCommon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="SarcophagusCommon.h" />
+    <ClInclude Include="MainVM.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

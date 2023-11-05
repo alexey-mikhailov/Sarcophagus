@@ -13,6 +13,16 @@ namespace winrt::Sarcophagus::implementation
 	struct MainPage : MainPageT<MainPage>
 	{
 		MainPage();
+
+		void Init(Sarcophagus::MainVM const& vm);
+
+		void OnEditCredential(IInspectable const& subject, RoutedEventArgs const& args);
+		void OnCopyCredential(IInspectable const& subject, RoutedEventArgs const& args);
+
+		Sarcophagus::MainVM MainVM() const { return _vm; }
+
+	private:
+		Sarcophagus::MainVM _vm { nullptr };
 	};
 }
 
