@@ -4,6 +4,11 @@ namespace Sarcophagus
 	runtimeclass MainWindow : Microsoft.UI.Xaml.Window
 	{
 		MainWindow();
-		Int32 MyProperty;
 	}
+
+	[default_interface]
+	runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page
+	{
+		MainPage();
+	} 
 }

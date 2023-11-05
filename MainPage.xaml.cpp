@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 #include "pch.h"
-#include "MainWindow.xaml.h"
 #include "MainPage.xaml.h"
-#if __has_include("MainWindow.g.cpp")
-#include "MainWindow.g.cpp"
+#if __has_include("MainPage.g.cpp")
+#include "MainPage.g.cpp"
 #endif
 
 using namespace winrt;
@@ -16,16 +15,8 @@ using namespace winrt::Microsoft::UI::Xaml;
 
 namespace winrt::Sarcophagus::implementation
 {
-	MainWindow::MainWindow()
+	MainPage::MainPage()
 	{
 		InitializeComponent();
-
-		HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>());
-	}
-
-	void MainWindow::OnContentLoaded(IInspectable const&, RoutedEventArgs const&)
-	{
-		SetTitleBar(AppTitleBar());
-		ExtendsContentIntoTitleBar(true);
 	}
 }

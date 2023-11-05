@@ -2,23 +2,23 @@
 // Licensed under the MIT License.
 
 #pragma once
-#include "MainWindow.g.h"
+
+#include "MainPage.g.h"
 
 using namespace winrt::Microsoft::UI::Xaml;
 using namespace winrt::Windows::Foundation;
 
 namespace winrt::Sarcophagus::implementation
 {
-	struct MainWindow : MainWindowT<MainWindow>
+	struct MainPage : MainPageT<MainPage>
 	{
-		MainWindow();
-		void OnContentLoaded(IInspectable const& sender, RoutedEventArgs const& args);
+		MainPage();
 	};
 }
 
 namespace winrt::Sarcophagus::factory_implementation
 {
-	struct MainWindow : MainWindowT<MainWindow, implementation::MainWindow>
+	struct MainPage : MainPageT<MainPage, implementation::MainPage>
 	{
 	};
 }

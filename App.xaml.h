@@ -5,15 +5,17 @@
 
 #include "App.xaml.g.h"
 
+using namespace winrt::Microsoft::UI::Xaml;
+
 namespace winrt::Sarcophagus::implementation
 {
 	struct App : AppT<App>
 	{
 		App();
 
-		void OnLaunched(Microsoft::UI::Xaml::LaunchActivatedEventArgs const&);
+		void OnLaunched(LaunchActivatedEventArgs const&);
 
 	private:
-		winrt::Microsoft::UI::Xaml::Window window{ nullptr };
+		Window window{ nullptr };
 	};
 }

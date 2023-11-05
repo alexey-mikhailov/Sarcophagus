@@ -4,15 +4,17 @@
 #include "pch.h"
 
 #include "App.xaml.h"
+
+#include "MainPage.xaml.h"
 #include "MainWindow.xaml.h"
+#include "SarcophagusCommon.h"
 
 using namespace winrt;
-using namespace Windows::Foundation;
-using namespace Microsoft::UI::Xaml;
-using namespace Microsoft::UI::Xaml::Controls;
-using namespace Microsoft::UI::Xaml::Navigation;
-using namespace Sarcophagus;
-using namespace Sarcophagus::implementation;
+using namespace winrt::Windows::Foundation;
+using namespace winrt::Microsoft::UI::Xaml::Controls;
+using namespace winrt::Microsoft::UI::Xaml::Navigation;
+using namespace winrt::Sarcophagus::implementation;
+using namespace ::Sarcophagus;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -44,5 +46,20 @@ App::App()
 void App::OnLaunched(LaunchActivatedEventArgs const&)
 {
 	window = make<MainWindow>();
+
+	// Set window size
+	if (HWND hWnd = ::Sarcophagus::GetWindowHandle(window))
+	{
+		// Retrieve the WindowId that corresponds to hWnd.
+		winrt::Microsoft::UI::WindowId windowId = Microsoft::UI::GetWindowIdFromWindow(hWnd);
+		winrt::Microsoft::UI::Windowing::AppWindow appWindow = winrt::Microsoft::UI::Windowing::AppWindow::GetFromWindowId(windowId);
+
+		if (appWindow)
+		{
+			appWindow.Resize({ 600, 300 });
+		}
+	}
+
+	window.ExtendsContentIntoTitleBar(true);
 	window.Activate();
 }
