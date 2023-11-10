@@ -17,13 +17,13 @@ namespace winrt::Sarcophagus::implementation
 		winrt::hstring Password() const { return _password; }
 		void Password(const winrt::hstring& password);
 
-		winrt::event_token PropertyChanged(Windows::UI::Xaml::Data::PropertyChangedEventHandler const& value);
+		winrt::event_token PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& value);
 		void PropertyChanged(const winrt::event_token& token);
 
 	private:
 		winrt::hstring _name;
 		winrt::hstring _password;
-		winrt::event<Windows::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
+		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
 	};
 
 	struct MainVM : MainVMT<MainVM>

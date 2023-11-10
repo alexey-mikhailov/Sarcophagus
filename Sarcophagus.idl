@@ -1,6 +1,6 @@
 namespace Sarcophagus
 {
-	runtimeclass Credential : Windows.UI.Xaml.Data.INotifyPropertyChanged
+	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
 		Credential(String name, String password);

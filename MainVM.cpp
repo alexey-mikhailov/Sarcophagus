@@ -11,7 +11,7 @@ namespace winrt::Sarcophagus::implementation
 		if (name != _name)
 		{
 			_name = name;
-			_propertyChanged(*this, Windows::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Name)));
+			_propertyChanged(*this, Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Name)));
 		}
 	}
 
@@ -20,11 +20,11 @@ namespace winrt::Sarcophagus::implementation
 		if (password != _password)
 		{
 			_password = password;
-			_propertyChanged(*this, Windows::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Password)));
+			_propertyChanged(*this, Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Password)));
 		}
 	}
 
-	winrt::event_token Credential::PropertyChanged(Windows::UI::Xaml::Data::PropertyChangedEventHandler const& value)
+	winrt::event_token Credential::PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& value)
 	{
 		return _propertyChanged.add(value);
 	}
