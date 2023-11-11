@@ -5,6 +5,7 @@
 
 namespace Sarcophagus
 {
+	constexpr wchar_t* EmptyString = L"";
 	HWND GetWindowHandle(winrt::Microsoft::UI::Xaml::Window window);
 	void Assert(bool expression, int32_t reason, const wchar_t* reasonStr, const wchar_t* message, const char* file, int line);
 	void Fail(int32_t reason, const wchar_t* reasonStr, const wchar_t* message, const char* file, int line);

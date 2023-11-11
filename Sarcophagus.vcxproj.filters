@@ -20,6 +20,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SarcophagusCommon.h" />
     <ClInclude Include="MainVM.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -36,6 +37,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Images\Icon_128x128.png" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Images\Icon_128x128.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Images\Icon_128x128.ico">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sarcophagus.rc" />
   </ItemGroup>
 </Project>
