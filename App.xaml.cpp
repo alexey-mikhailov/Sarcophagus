@@ -5,7 +5,6 @@
 
 #include "App.xaml.h"
 
-#include "MainPage.xaml.h"
 #include "MainWindow.xaml.h"
 #include "SarcophagusCommon.h"
 
@@ -48,7 +47,7 @@ void App::OnLaunched(LaunchActivatedEventArgs const&)
 	window = make<MainWindow>();
 
 	// Set window size
-	if (HWND hWnd = ::Sarcophagus::GetWindowHandle(window))
+	if (HWND hWnd = GetWindowHandle(window))
 	{
 		// Retrieve the WindowId that corresponds to hWnd.
 		winrt::Microsoft::UI::WindowId windowId = Microsoft::UI::GetWindowIdFromWindow(hWnd);

@@ -12,7 +12,8 @@
           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           Loaded="OnContentLoaded">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid>
@@ -39,6 +40,7 @@
                     Canvas.ZIndex="1"
                     IsHitTestVisible="True"/>
         </Grid>
+        <BreadcrumbBar x:Name="BreadcrumbBar" Margin="10,0,10,0" FontSize="8" Grid.Row="1"/>
         <Frame x:Name="HostedPageFrame" Grid.Row="2"/>
     </Grid>
 </Window>

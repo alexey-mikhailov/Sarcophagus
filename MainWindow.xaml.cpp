@@ -61,7 +61,12 @@ namespace winrt::Sarcophagus::implementation
 				SendMessage(hWnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIcon));
 			}
 		}
-		
+
+		const auto itemMain = hstring(L"Main");
+		const auto vector = winrt::single_threaded_observable_vector<hstring>();
+		vector.Append(itemMain);
+		BreadcrumbBar().ItemsSource(vector);
+
 		if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>()))
 		{
 			if (const auto mainPage = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
