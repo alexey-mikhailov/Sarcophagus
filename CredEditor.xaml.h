@@ -1,9 +1,8 @@
-// Copyright (c) Microsoft Corporation and Contributors.
-// Licensed under the MIT License.
-
 #pragma once
-
 #include "CredEditor.g.h"
+
+using namespace winrt::Microsoft::UI::Xaml;
+using namespace winrt::Windows::Foundation;
 
 namespace winrt::Sarcophagus::implementation
 {
@@ -11,8 +10,8 @@ namespace winrt::Sarcophagus::implementation
 	{
 		CredEditor();
 		void Init(Sarcophagus::MainVM const& vm);
-		void myButton_Click(Windows::Foundation::IInspectable const& sender,
-		                    Microsoft::UI::Xaml::RoutedEventArgs const& args);
+		void OnOk(IInspectable const& sender, RoutedEventArgs const& e);
+		void OnCancel(IInspectable const& sender, RoutedEventArgs const& e);
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 

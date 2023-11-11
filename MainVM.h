@@ -34,6 +34,7 @@ namespace winrt::Sarcophagus::implementation
 		void PageId(winrt::Sarcophagus::PageId pageId);
 
 		Sarcophagus::Credential CredentialTemplate() const { return _credentialTemplate; }
+		void CredentialTemplate(Sarcophagus::Credential const& value) { _credentialTemplate = value; }
 		IObservableVector<Sarcophagus::Credential> Credentials() const { return _credentials; }
 
 		winrt::event_token PageChanged(PageChangedDelegate const& value) { return _pageChanged.add(value); }

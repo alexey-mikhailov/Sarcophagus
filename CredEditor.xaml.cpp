@@ -25,9 +25,15 @@ namespace winrt::Sarcophagus::implementation
 		_vm = vm;
 	}
 
-	void CredEditor::myButton_Click(IInspectable const&, RoutedEventArgs const&)
+	void CredEditor::OnOk(IInspectable const&, RoutedEventArgs const&)
 	{
-		myButton().Content(box_value(L"Clicked"));
+		_vm.PageId(Sarcophagus::PageId::Main);
+
+		// TODO: Accept credentials
+	}
+
+	void CredEditor::OnCancel(IInspectable const&, RoutedEventArgs const&)
+	{
 		_vm.PageId(Sarcophagus::PageId::Main);
 	}
 }
