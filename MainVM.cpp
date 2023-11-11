@@ -41,4 +41,14 @@ namespace winrt::Sarcophagus::implementation
 		_credentials.Append(Sarcophagus::Credential(L"Key 2", L"Value 2"));
 		_credentials.Append(Sarcophagus::Credential(L"Key 3", L"Value 3"));
 	}
+
+	void MainVM::PageId(winrt::Sarcophagus::PageId pageId)
+	{
+		if (pageId != _pageId)
+		{
+			_pageChanged(pageId);
+		}
+
+		_pageId = pageId;
+	}
 }

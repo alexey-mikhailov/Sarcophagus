@@ -30,12 +30,21 @@ namespace winrt::Sarcophagus::implementation
 	{
 		MainVM();
 
+		Sarcophagus::PageId PageId() { return _pageId; }
+		void PageId(winrt::Sarcophagus::PageId pageId);
+
 		Sarcophagus::Credential CredentialTemplate() const { return _credentialTemplate; }
 		IObservableVector<Sarcophagus::Credential> Credentials() const { return _credentials; }
 
+		winrt::event_token PageChanged(PageChangedDelegate const& value) { return _pageChanged.add(value); }
+		void PageChanged(winrt::event_token const& token) noexcept { _pageChanged.remove(token); }
+
 	private:
+		Sarcophagus::PageId _pageId = Sarcophagus::PageId::Main;
 		Sarcophagus::Credential _credentialTemplate = nullptr;
 		IObservableVector<Sarcophagus::Credential> _credentials;
+
+		winrt::event<PageChangedDelegate> _pageChanged;
 	};
 }
 

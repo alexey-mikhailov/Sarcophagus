@@ -1,5 +1,17 @@
 namespace Sarcophagus
 {
+	delegate void PageChangedDelegate(PageId pageId);
+
+	// 
+	// View-Models
+	// 
+
+	enum PageId
+	{
+		Main,
+		EditCredential
+	};
+
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
@@ -13,20 +25,34 @@ namespace Sarcophagus
 	{
 		MainVM();
 
+		PageId PageId{ get; set; };
 		Credential CredentialTemplate{ get; };
 		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
+
+		event PageChangedDelegate PageChanged;
 	}
+
+	// 
+	// Views
+	// 
 
 	[default_interface]
 	runtimeclass MainWindow : Microsoft.UI.Xaml.Window
 	{
 		MainWindow();
+		MainVM MainVM{ get; };
 	}
 
 	[default_interface]
 	runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page
 	{
 		MainPage();
+		MainVM MainVM{ get; };
+	}
+
+	runtimeclass CredEditor : Microsoft.UI.Xaml.Controls.Page
+	{
+		CredEditor();
 		MainVM MainVM{ get; };
 	}
 }

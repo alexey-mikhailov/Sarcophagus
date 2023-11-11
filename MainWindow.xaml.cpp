@@ -3,6 +3,8 @@
 
 #include "pch.h"
 #include "MainWindow.xaml.h"
+
+#include "CredEditor.xaml.h"
 #include "MainPage.xaml.h"
 #include "resource.h"
 
@@ -62,23 +64,48 @@ namespace winrt::Sarcophagus::implementation
 			}
 		}
 
-		const auto itemMain = hstring(L"Main");
-		const auto vector = winrt::single_threaded_observable_vector<hstring>();
-		vector.Append(itemMain);
-		BreadcrumbBar().ItemsSource(vector);
+		// Subscribe
+		_vm.PageChanged(PageChangedDelegate(this, &MainWindow::OnPageChanged));
 
-		if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>()))
-		{
-			if (const auto mainPage = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
-			{
-				mainPage->Init(_vm);
-			}
-		}
+		// And invoke immediately (init)
+		OnPageChanged(PageId::Main);
 	}
 
 	void MainWindow::OnContentLoaded(IInspectable const&, RoutedEventArgs const&)
 	{
 		SetTitleBar(AppTitleBar());
 		ExtendsContentIntoTitleBar(true);
+	}
+
+	void MainWindow::OnPageChanged(Sarcophagus::PageId pageId)
+	{
+		if (pageId == PageId::Main)
+		{
+			// Change breadcrumb bar content. 
+			BreadcrumbBar().ItemsSource(winrt::single_threaded_observable_vector<hstring>({ L"Main" }));
+
+			// Navigate to new frame
+			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>()))
+			{
+				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
+				{
+					page->Init(_vm);
+				}
+			}
+		}
+		else if (pageId == PageId::EditCredential)
+		{
+			// Change breadcrumb bar content. 
+			BreadcrumbBar().ItemsSource(winrt::single_threaded_observable_vector<hstring>({ L"Main", L"Edit credential"}));
+
+			// Navigate to new frame
+			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::CredEditor>()))
+			{
+				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::CredEditor>())
+				{
+					page->Init(_vm);
+				}
+			}
+		}
 	}
 }

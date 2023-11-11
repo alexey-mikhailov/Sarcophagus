@@ -6,6 +6,7 @@
   <ItemGroup>
     <Page Include="MainWindow.xaml" />
     <Page Include="MainPage.xaml" />
+    <Page Include="CredEditor.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Sarcophagus.idl" />

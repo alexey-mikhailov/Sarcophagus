@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "MainPage.xaml.h"
+#include "MainWindow.xaml.h"
 #if __has_include("MainPage.g.cpp")
 #include "MainPage.g.cpp"
 #endif
@@ -27,6 +28,7 @@ namespace winrt::Sarcophagus::implementation
 
 	void MainPage::OnEditCredential(IInspectable const&, RoutedEventArgs const&)
 	{
+		_vm.PageId(Sarcophagus::PageId::EditCredential);
 	}
 
 	void MainPage::OnCopyCredential(IInspectable const&, RoutedEventArgs const&)
