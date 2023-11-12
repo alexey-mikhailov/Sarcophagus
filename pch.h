@@ -33,9 +33,11 @@
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.Storage.Search.h>
+#include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Storage.Pickers.h>
 #include <winrt/Windows.UI.Xaml.Interop.h>
 
+#include <robuffer.h>
 #include <Shobjidl.h>
 #include <Windows.h>
 #include <ostream>
