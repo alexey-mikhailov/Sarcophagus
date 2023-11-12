@@ -31,9 +31,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Password" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <TextBox Text="{x:Bind MainVM.CredentialTemplate.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" />
+                <PasswordBox x:Name="pwdBox1" PlaceholderText="Enter new password here" Grid.Column="1" />
             </Grid>
-            <Button x:Name="ButtonBack" Click="OnBack" Content="Back" HorizontalAlignment="Right" />
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="67"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Password" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                <PasswordBox x:Name="pwdBox2" PlaceholderText="Enter new password here once again" Grid.Column="1" />
+            </Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="ButtonOk" Click="OnOk" Content="OK"  />
+                <Border Width="2"/>
+                <Button x:Name="ButtonCancel" Click="OnCancel" Content="Cancel" />
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Right" VerticalAlignment="Center" 

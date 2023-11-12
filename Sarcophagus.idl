@@ -13,6 +13,18 @@ namespace Sarcophagus
 	};
 
 	[default_interface]
+	runtimeclass AddCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		AddCredentialCommand();
+	}
+	
+	[default_interface]
+	runtimeclass RemoveCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		RemoveCredentialCommand();
+	}
+
+	[default_interface]
 	runtimeclass EditCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		EditCredentialCommand();
@@ -58,6 +70,8 @@ namespace Sarcophagus
 		Credential CredentialTemplate{ get; set; };
 		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
 
+		AddCredentialCommand AddCredentialCommand{ get; };
+		RemoveCredentialCommand RemoveCredentialCommand{ get; };
 		EditCredentialCommand EditCredentialCommand{ get; };
 		CopyCredentialCommand CopyCredentialCommand{ get; };
 		OpenFileCommand OpenFileCommand{ get; };

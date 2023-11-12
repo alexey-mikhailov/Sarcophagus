@@ -48,6 +48,8 @@ namespace winrt::Sarcophagus::implementation
 		winrt::event_token PageChanged(PageChangedDelegate const& value) { return _pageChanged.add(value); }
 		void PageChanged(winrt::event_token const& token) noexcept { _pageChanged.remove(token); }
 
+		Sarcophagus::AddCredentialCommand AddCredentialCommand() const { return _addCredentialCommand; }
+		Sarcophagus::RemoveCredentialCommand RemoveCredentialCommand() const { return _removeCredentialCommand; }
 		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
 		Sarcophagus::CopyCredentialCommand CopyCredentialCommand() const { return _copyCredentialCommand; }
 		Sarcophagus::OpenFileCommand OpenFileCommand() const { return _openFileCommand; }
@@ -58,6 +60,8 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::Credential _credentialTemplate = nullptr;
 		IObservableVector<Sarcophagus::Credential> _credentials;
 
+		Sarcophagus::AddCredentialCommand _addCredentialCommand;
+		Sarcophagus::RemoveCredentialCommand _removeCredentialCommand;
 		Sarcophagus::EditCredentialCommand _editCredentialCommand;
 		Sarcophagus::CopyCredentialCommand _copyCredentialCommand;
 		Sarcophagus::OpenFileCommand _openFileCommand;

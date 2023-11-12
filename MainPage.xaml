@@ -13,8 +13,13 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" 
                   HorizontalScrollBarVisibility="Disabled"
-                  Grid.Row="1">
+                  Grid.Row="1" 
+                  Padding="0,-30,0,0">
         <StackPanel>
+            <Button Content="Add" 
+                    Command="{x:Bind MainVM.AddCredentialCommand}" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,0,10,0" />
             <Border Padding="5">
                 <ItemsControl x:Name="itemsControlAccs" ItemsSource="{x:Bind MainVM.Credentials}">
                     <ItemsControl.ItemsPanel>
@@ -30,10 +35,12 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center"/>
                                     <Button Grid.Column="1" Content="Edit" Command="{x:Bind MainVM.EditCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
                                     <Button Grid.Column="2" Content="Copy" Command="{x:Bind MainVM.CopyCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
+                                    <Button Grid.Column="3" Content="x" Command="{x:Bind MainVM.RemoveCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
                                 </Grid>
                             </Border>
                         </DataTemplate>
