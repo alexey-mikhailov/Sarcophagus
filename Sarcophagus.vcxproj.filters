@@ -16,10 +16,12 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="MainVM.cpp" />
     <ClCompile Include="SarcophagusCommon.cpp" />
+    <ClCompile Include="SarcophagusCommands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="SarcophagusCommon.h" />
+    <ClCompile Include="SarcophagusCommands.h" />
     <ClInclude Include="MainVM.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

@@ -132,6 +132,7 @@
     <ClCompile Include="CredEditor.xaml.cpp">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -31,9 +31,9 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{x:Bind Password}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center"/>
-                                    <Button Grid.Column="1" Content="Edit" Click="OnEditCredential" Margin="1" />
-                                    <Button Grid.Column="2" Content="Copy" Click="OnCopyCredential" Margin="1" />
+                                    <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" Content="Edit" Command="{x:Bind MainVM.EditCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
+                                    <Button Grid.Column="2" Content="Copy" Command="{x:Bind MainVM.CopyCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
                                 </Grid>
                             </Border>
                         </DataTemplate>

@@ -25,14 +25,7 @@ namespace winrt::Sarcophagus::implementation
 		_vm = vm;
 	}
 
-	void CredEditor::OnOk(IInspectable const&, RoutedEventArgs const&)
-	{
-		_vm.PageId(Sarcophagus::PageId::Main);
-
-		// TODO: Accept credentials
-	}
-
-	void CredEditor::OnCancel(IInspectable const&, RoutedEventArgs const&)
+	void CredEditor::OnBack(IInspectable const&, RoutedEventArgs const&)
 	{
 		_vm.PageId(Sarcophagus::PageId::Main);
 	}

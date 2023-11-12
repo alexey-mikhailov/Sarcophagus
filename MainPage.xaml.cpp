@@ -25,13 +25,4 @@ namespace winrt::Sarcophagus::implementation
 	{
 		_vm = vm;
 	}
-
-	void MainPage::OnEditCredential(IInspectable const&, RoutedEventArgs const&)
-	{
-		_vm.PageId(Sarcophagus::PageId::EditCredential);
-	}
-
-	void MainPage::OnCopyCredential(IInspectable const&, RoutedEventArgs const&)
-	{
-	}
 }

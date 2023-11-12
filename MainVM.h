@@ -11,6 +11,8 @@ namespace winrt::Sarcophagus::implementation
 		Credential() = default;
 		Credential(winrt::hstring name, winrt::hstring password) : _name(name), _password(password) {}
 
+		Sarcophagus::MainVM MainVM() const { return Sarcophagus::MainVM::GetInstance(); }
+
 		winrt::hstring Name() const { return _name; }
 		void Name(const winrt::hstring& name);
 
@@ -30,6 +32,12 @@ namespace winrt::Sarcophagus::implementation
 	{
 		MainVM();
 
+		static Sarcophagus::MainVM GetInstance()
+		{
+			static Sarcophagus::MainVM instance = winrt::make<Sarcophagus::implementation::MainVM>();
+			return instance;
+		}
+
 		Sarcophagus::PageId PageId() { return _pageId; }
 		void PageId(winrt::Sarcophagus::PageId pageId);
 
@@ -40,10 +48,16 @@ namespace winrt::Sarcophagus::implementation
 		winrt::event_token PageChanged(PageChangedDelegate const& value) { return _pageChanged.add(value); }
 		void PageChanged(winrt::event_token const& token) noexcept { _pageChanged.remove(token); }
 
+		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
+		Sarcophagus::CopyCredentialCommand CopyCredentialCommand() const { return _copyCredentialCommand; }
+
 	private:
 		Sarcophagus::PageId _pageId = Sarcophagus::PageId::Main;
 		Sarcophagus::Credential _credentialTemplate = nullptr;
 		IObservableVector<Sarcophagus::Credential> _credentials;
+
+		Sarcophagus::EditCredentialCommand _editCredentialCommand;
+		Sarcophagus::CopyCredentialCommand _copyCredentialCommand;
 
 		winrt::event<PageChangedDelegate> _pageChanged;
 	};

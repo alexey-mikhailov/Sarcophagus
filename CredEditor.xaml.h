@@ -10,8 +10,7 @@ namespace winrt::Sarcophagus::implementation
 	{
 		CredEditor();
 		void Init(Sarcophagus::MainVM const& vm);
-		void OnOk(IInspectable const& sender, RoutedEventArgs const& e);
-		void OnCancel(IInspectable const& sender, RoutedEventArgs const& e);
+		void OnBack(IInspectable const& sender, RoutedEventArgs const& e);
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 

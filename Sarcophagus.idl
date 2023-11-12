@@ -12,10 +12,24 @@ namespace Sarcophagus
 		EditCredential
 	};
 
+	[default_interface]
+	runtimeclass EditCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		EditCredentialCommand();
+	}
+	
+	[default_interface]
+	runtimeclass CopyCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		CopyCredentialCommand();
+	}
+	
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
 		Credential(String name, String password);
+
+		MainVM MainVM{ get; };
 
 		String Name;
 		String Password;
@@ -24,10 +38,14 @@ namespace Sarcophagus
 	runtimeclass MainVM
 	{
 		MainVM();
+		static MainVM GetInstance();
 
 		PageId PageId{ get; set; };
 		Credential CredentialTemplate{ get; set; };
 		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
+
+		EditCredentialCommand EditCredentialCommand{ get; };
+		CopyCredentialCommand CopyCredentialCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
 	}

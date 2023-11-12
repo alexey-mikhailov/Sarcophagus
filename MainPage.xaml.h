@@ -16,9 +16,6 @@ namespace winrt::Sarcophagus::implementation
 
 		void Init(Sarcophagus::MainVM const& vm);
 
-		void OnEditCredential(IInspectable const& subject, RoutedEventArgs const& args);
-		void OnCopyCredential(IInspectable const& subject, RoutedEventArgs const& args);
-
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 
 	private:

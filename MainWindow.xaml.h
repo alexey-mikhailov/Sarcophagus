@@ -14,10 +14,11 @@ namespace winrt::Sarcophagus::implementation
 		MainWindow();
 		void OnContentLoaded(IInspectable const& sender, RoutedEventArgs const& args);
 		void OnPageChanged(Sarcophagus::PageId pageId);
+
 		MainVM MainVM() const { return _vm; }
 
 	private:
-		Sarcophagus::MainVM _vm;
+		Sarcophagus::MainVM _vm{MainVM::GetInstance()};
 	};
 }
 
