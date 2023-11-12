@@ -31,8 +31,12 @@
 #include <winrt/Windows.ApplicationModel.DataTransfer.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Storage.Search.h>
+#include <winrt/Windows.Storage.Pickers.h>
 #include <winrt/Windows.UI.Xaml.Interop.h>
 
+#include <Shobjidl.h>
 #include <Windows.h>
 #include <ostream>
 #include <sstream>

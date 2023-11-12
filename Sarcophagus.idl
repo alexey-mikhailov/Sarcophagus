@@ -23,7 +23,21 @@ namespace Sarcophagus
 	{
 		CopyCredentialCommand();
 	}
-	
+
+	[default_interface]
+	runtimeclass OpenFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		OpenFileCommand();
+		Int64 WindowHandle{ get; set; };
+	}
+
+	[default_interface]
+	runtimeclass SaveFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		SaveFileCommand();
+		Int64 WindowHandle{ get; set; };
+	}
+
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
@@ -46,6 +60,8 @@ namespace Sarcophagus
 
 		EditCredentialCommand EditCredentialCommand{ get; };
 		CopyCredentialCommand CopyCredentialCommand{ get; };
+		OpenFileCommand OpenFileCommand{ get; };
+		SaveFileCommand SaveFileCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
 	}

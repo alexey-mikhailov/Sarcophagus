@@ -26,8 +26,8 @@
                 <TextBlock Text="Sarcophagus" VerticalAlignment="Center" Margin="4,0,8,0" FontSize="10" />
                 <MenuBar VerticalAlignment="Bottom" Margin="0,0,0,0">
                     <MenuBarItem Title="File">
-                        <MenuFlyoutItem Text="Open"/>
-                        <MenuFlyoutItem Text="Save"/>
+                        <MenuFlyoutItem Text="Open" Command="{x:Bind MainVM.OpenFileCommand}" CommandParameter="{x:Bind}" />
+                        <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.SaveFileCommand}" CommandParameter="{x:Bind}" />
                     </MenuBarItem>
                 </MenuBar>
             </StackPanel>

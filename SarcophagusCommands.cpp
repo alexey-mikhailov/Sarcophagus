@@ -3,6 +3,8 @@
 
 #if __has_include("EditCredentialCommand.g.cpp")
 #include "EditCredentialCommand.g.cpp"
+#endif
+#if __has_include("CopyCredentialCommand.g.cpp")
 #include "CopyCredentialCommand.g.cpp"
 #endif
 

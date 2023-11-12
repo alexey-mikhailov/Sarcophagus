@@ -50,6 +50,8 @@ namespace winrt::Sarcophagus::implementation
 
 		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
 		Sarcophagus::CopyCredentialCommand CopyCredentialCommand() const { return _copyCredentialCommand; }
+		Sarcophagus::OpenFileCommand OpenFileCommand() const { return _openFileCommand; }
+		Sarcophagus::SaveFileCommand SaveFileCommand() const { return _saveFileCommand; }
 
 	private:
 		Sarcophagus::PageId _pageId = Sarcophagus::PageId::Main;
@@ -58,6 +60,8 @@ namespace winrt::Sarcophagus::implementation
 
 		Sarcophagus::EditCredentialCommand _editCredentialCommand;
 		Sarcophagus::CopyCredentialCommand _copyCredentialCommand;
+		Sarcophagus::OpenFileCommand _openFileCommand;
+		Sarcophagus::SaveFileCommand _saveFileCommand;
 
 		winrt::event<PageChangedDelegate> _pageChanged;
 	};

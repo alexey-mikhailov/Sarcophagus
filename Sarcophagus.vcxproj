@@ -105,6 +105,7 @@
     <ClInclude Include="CredEditor.xaml.h">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="FileMenuCommands.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MainPage.xaml.h">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -118,6 +119,7 @@
     <ClInclude Include="MainWindow.xaml.h">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="SarcophagusCommands.h" />
     <ClInclude Include="SarcophagusCommon.h" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +134,7 @@
     <ClCompile Include="CredEditor.xaml.cpp">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="FileMenuCommands.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>
