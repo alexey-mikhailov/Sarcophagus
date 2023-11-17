@@ -7,6 +7,9 @@
 #include "CredEditor.g.cpp"
 #endif
 
+#include "InternalCryptoTool.h"
+#include "SarcophagusCommon.h"
+
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 
@@ -29,9 +32,25 @@ namespace winrt::Sarcophagus::implementation
 	{
 		if (pwdBox1().Password() == pwdBox2().Password())
 		{
-			// TODO: Encrypt
+			uint64_t pwdSize;
+			uint8_t* pwdBuff;
+			const ::Sarcophagus::InternalCryptoTool::EncryptResult result = ::Sarcophagus::InternalCryptoTool::GetInstance().Encrypt
+			(
+				sizeof(winrt::hstring::value_type) * pwdBox1().Password().size(),
+				reinterpret_cast<const uint8_t*>(pwdBox1().Password().c_str()),
+				&pwdSize,
+				&pwdBuff
+			);
 
-			winrt::hstring const& pwd = pwdBox1().Password();
+			SARCOPHAGUS_ASSERT(result == ::Sarcophagus::InternalCryptoTool::EncryptResult::Success, NULL, L"Internal encryption failed. ");
+			SARCOPHAGUS_ASSERT(pwdSize % 2 == 0, NULL, L"Encrypted password should be wide string (with even size). ");
+
+			const winrt::hstring pwd
+			{
+				reinterpret_cast<wchar_t*>(pwdBuff),
+				static_cast<hstring::size_type>(pwdSize / 2)
+			};
+
 			winrt::Sarcophagus::Credential const& tmp = _vm.CredentialTemplate();
 			tmp.Password(pwd);
 			_vm.PageId(Sarcophagus::PageId::Main);

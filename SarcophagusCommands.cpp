@@ -1,6 +1,9 @@
 ﻿#include "pch.h"
 #include "SarcophagusCommands.h"
 
+#include "InternalCryptoTool.h"
+#include "SarcophagusCommon.h"
+
 #if __has_include("EditCredentialCommand.g.cpp")
 #include "EditCredentialCommand.g.cpp"
 #endif
@@ -53,8 +56,25 @@ namespace winrt::Sarcophagus::implementation
 
 		if (auto credential = parameter.try_as<Sarcophagus::Credential>())
 		{
+			uint64_t pwdSize;
+			uint8_t* pwdBuff;
+			const ::Sarcophagus::InternalCryptoTool::DecryptResult result = ::Sarcophagus::InternalCryptoTool::GetInstance().Decrypt
+			(
+				sizeof(winrt::hstring::value_type) * credential.Password().size(),
+				reinterpret_cast<const uint8_t*>(credential.Password().c_str()),
+				&pwdSize,
+				&pwdBuff
+			);
+
+			SARCOPHAGUS_ASSERT(result == ::Sarcophagus::InternalCryptoTool::DecryptResult::Success, NULL, L"Internal decryption failed. ");
+			SARCOPHAGUS_ASSERT(pwdSize % 2 == 0, NULL, L"Decrypted password should be wide string (with even size). ");
+
 			winrt::Windows::ApplicationModel::DataTransfer::DataPackage dataPackage{};
-			dataPackage.SetText(credential.Password());
+			dataPackage.SetText(winrt::hstring
+			{
+				reinterpret_cast<wchar_t*>(pwdBuff),
+				static_cast<hstring::size_type>(pwdSize / 2)
+			});
 			winrt::Windows::ApplicationModel::DataTransfer::Clipboard::SetContent(dataPackage);
 		}
 	}

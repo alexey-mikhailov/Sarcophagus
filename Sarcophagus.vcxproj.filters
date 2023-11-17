@@ -18,6 +18,10 @@
     <ClCompile Include="SarcophagusCommon.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="SarcophagusCommon.cpp" />
+    <ClCompile Include="SarcophagusCommands.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="InternalCryptoTool.cpp" />
     <ClCompile Include="FileMenuCommands.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,7 +29,9 @@
     <ClInclude Include="SarcophagusCommon.h" />
     <ClInclude Include="MainVM.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="InternalCryptoTool.h" />
     <ClInclude Include="FileMenuCommands.h" />
+    <ClInclude Include="Serialization\FileProtocol.h" />
     <ClInclude Include="SarcophagusCommands.h" />
   </ItemGroup>
   <ItemGroup>

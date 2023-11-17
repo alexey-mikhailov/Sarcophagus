@@ -106,6 +106,8 @@
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="FileMenuCommands.h" />
+    <ClInclude Include="InternalCryptoTool.h" />
+    <ClInclude Include="Serialization\FileProtocol.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MainPage.xaml.h">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -135,6 +137,7 @@
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="FileMenuCommands.cpp" />
+    <ClCompile Include="InternalCryptoTool.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>

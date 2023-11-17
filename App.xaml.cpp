@@ -5,6 +5,7 @@
 
 #include "App.xaml.h"
 
+#include "InternalCryptoTool.h"
 #include "MainWindow.xaml.h"
 #include "SarcophagusCommon.h"
 
@@ -45,6 +46,9 @@ App::App()
 void App::OnLaunched(LaunchActivatedEventArgs const&)
 {
 	window = make<MainWindow>();
+
+	// Initialize internal crypto tool.
+	InternalCryptoTool::GetInstance().Setup(0x100, CipherTable);
 
 	// Set window size
 	if (HWND hWnd = GetWindowHandle(window))
