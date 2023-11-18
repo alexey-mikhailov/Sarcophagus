@@ -1,12 +1,26 @@
 #pragma once
+#include "ChooseCryptoengineToCreateFileCommand.g.h"
 #include "NewFileCommand.g.h"
 #include "OpenFileCommand.g.h"
+#include "ChooseCryptoengineToSaveFileCommand.g.h"
 #include "SaveFileCommand.g.h"
 
 using namespace winrt::Windows::Foundation;
 
 namespace winrt::Sarcophagus::implementation
 {
+    struct ChooseCryptoengineToCreateFileCommand : ChooseCryptoengineToCreateFileCommandT<ChooseCryptoengineToCreateFileCommand>
+    {
+        ChooseCryptoengineToCreateFileCommand() = default;
+        winrt::event_token CanExecuteChanged(EventHandler<IInspectable> const& value) { return _canExecuteChanged.add(value); }
+        void CanExecuteChanged(winrt::event_token const& token) { _canExecuteChanged.remove(token); }
+        auto CanExecute(IInspectable const&) { return true; }
+        void Execute(IInspectable const& parameter);
+
+    private:
+        winrt::event<EventHandler<IInspectable>> _canExecuteChanged;
+    };
+
     struct NewFileCommand : NewFileCommandT<NewFileCommand>
     {
         NewFileCommand() = default;
@@ -41,6 +55,18 @@ namespace winrt::Sarcophagus::implementation
         HWND _hWnd;
     };
 
+    struct ChooseCryptoengineToSaveFileCommand : ChooseCryptoengineToSaveFileCommandT<ChooseCryptoengineToSaveFileCommand>
+    {
+        ChooseCryptoengineToSaveFileCommand() = default;
+        winrt::event_token CanExecuteChanged(EventHandler<IInspectable> const& value) { return _canExecuteChanged.add(value); }
+        void CanExecuteChanged(winrt::event_token const& token) { _canExecuteChanged.remove(token); }
+        auto CanExecute(IInspectable const&) { return true; }
+        void Execute(IInspectable const& parameter);
+
+    private:
+        winrt::event<EventHandler<IInspectable>> _canExecuteChanged;
+    };
+
     struct SaveFileCommand : SaveFileCommandT<SaveFileCommand>
     {
         SaveFileCommand() = default;
@@ -61,7 +87,9 @@ namespace winrt::Sarcophagus::implementation
 
 namespace winrt::Sarcophagus::factory_implementation
 {
+    struct ChooseCryptoengineToCreateFileCommand : ChooseCryptoengineToCreateFileCommandT<ChooseCryptoengineToCreateFileCommand, implementation::ChooseCryptoengineToCreateFileCommand> {};
     struct NewFileCommand : NewFileCommandT<NewFileCommand, implementation::NewFileCommand> {};
     struct OpenFileCommand : OpenFileCommandT<OpenFileCommand, implementation::OpenFileCommand> {};
+    struct ChooseCryptoengineToSaveFileCommand : ChooseCryptoengineToSaveFileCommandT<ChooseCryptoengineToSaveFileCommand, implementation::ChooseCryptoengineToSaveFileCommand> {};
     struct SaveFileCommand : SaveFileCommandT<SaveFileCommand, implementation::SaveFileCommand> {};
 }

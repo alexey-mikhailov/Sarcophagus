@@ -23,6 +23,8 @@ namespace srfg
 		virtual void encrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst);
 		virtual void decrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst);
 		virtual guid_t get_uuid() const override;
+		virtual std::string get_name() const override;
+		virtual std::wstring get_wname() const override;
 
 		std::vector<std::pair<int, int>> get_first_rotor() const { return _first_rotor; }
 		std::vector<std::pair<int, int>> get_second_rotor() const { return _second_rotor; }

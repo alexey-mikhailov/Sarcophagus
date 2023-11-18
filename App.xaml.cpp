@@ -6,6 +6,7 @@
 #include "App.xaml.h"
 
 #include "cryptoselector.h"
+#include "DialogTools.h"
 #include "InternalCryptoTool.h"
 #include "MainWindow.xaml.h"
 #include "SarcophagusCommon.h"
@@ -57,6 +58,9 @@ void App::OnLaunched(LaunchActivatedEventArgs const&)
 
 	// Initialize internal crypto tool.
 	InternalCryptoTool::GetInstance().Setup(0x100, CipherTable);
+
+	// Scan cryptoengines. 
+	ViewModelHub::GetInstance().ChooseCryptoengineVM().Rescan();
 
 	// Set window size
 	if (HWND hWnd = GetWindowHandle(_window))

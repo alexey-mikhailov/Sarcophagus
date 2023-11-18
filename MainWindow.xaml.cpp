@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "MainWindow.xaml.h"
 
+#include "ChooseCryptoenginePage.xaml.h"
 #include "CredEditor.xaml.h"
 #include "MainPage.xaml.h"
 #include "resource.h"
@@ -72,7 +73,7 @@ namespace winrt::Sarcophagus::implementation
 		_vm.PageChanged(PageChangedDelegate(this, &MainWindow::OnPageChanged));
 
 		// And invoke immediately (init)
-		OnPageChanged(PageId::Main);
+		OnPageChanged(PageId::ChooseCryptoengine);
 	}
 
 	void MainWindow::OnContentLoaded(IInspectable const&, RoutedEventArgs const&)
@@ -93,7 +94,7 @@ namespace winrt::Sarcophagus::implementation
 			{
 				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
 				{
-					page->Init(_vm);
+					page->Init();
 				}
 			}
 		}
@@ -107,7 +108,21 @@ namespace winrt::Sarcophagus::implementation
 			{
 				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::CredEditor>())
 				{
-					page->Init(_vm);
+					page->Init();
+				}
+			}
+		}
+		else if (pageId == PageId::ChooseCryptoengine)
+		{
+			// Change breadcrumb bar content. 
+			BreadcrumbBar().ItemsSource(winrt::single_threaded_observable_vector<hstring>({ L"Main", L"Choose crypto engine"}));
+
+			// Navigate to new frame
+			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::ChooseCryptoenginePage>()))
+			{
+				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::ChooseCryptoenginePage>())
+				{
+					page->Init();
 				}
 			}
 		}

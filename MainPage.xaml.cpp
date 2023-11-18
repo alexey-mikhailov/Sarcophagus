@@ -21,8 +21,8 @@ namespace winrt::Sarcophagus::implementation
 		InitializeComponent();
 	}
 
-	void MainPage::Init(Sarcophagus::MainVM const& vm)
+	void MainPage::Init()
 	{
-		_vm = vm;
+		_vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 	}
 }

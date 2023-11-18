@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "MainVM.h"
 
+#include "SarcophagusCommon.h"
+#include "ViewModelHub.h"
+
 #if __has_include("Credential.g.cpp")
 #include "Credential.g.cpp"
 #endif
@@ -8,10 +11,13 @@
 #include "MainVM.g.cpp"
 #endif
 
-#include <SarcophagusCommon.h>
-
 namespace winrt::Sarcophagus::implementation
 {
+	winrt::Sarcophagus::MainVM Credential::MainVM() const
+	{
+		return ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+	}
+
 	void Credential::Name(const winrt::hstring& name)
 	{
 		if (name != _name)
@@ -43,9 +49,6 @@ namespace winrt::Sarcophagus::implementation
 	MainVM::MainVM()
 	{
 		_credentials = winrt::single_threaded_observable_vector<Sarcophagus::Credential>();
-		_credentials.Append(Sarcophagus::Credential(L"Key 1", L"Value 1"));
-		_credentials.Append(Sarcophagus::Credential(L"Key 2", L"Value 2"));
-		_credentials.Append(Sarcophagus::Credential(L"Key 3", L"Value 3"));
 	}
 
 	void MainVM::PageId(winrt::Sarcophagus::PageId pageId)

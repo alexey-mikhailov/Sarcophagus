@@ -49,6 +49,52 @@ namespace srfg
 		}
 	}
 
+	void cryptoselector::scan(const std::vector<std::wstring>& file_paths)
+	{
+		_engines.clear();
+
+		// Scan files
+		for (auto file_path : file_paths)
+		{
+			::HMODULE module{};
+
+			if (file_path[file_path.size() - 1])
+			{
+				// Non-zero terminated source. 
+				wchar_t* sz_name = new wchar_t[file_path.size() + 1];
+				memcpy_s(sz_name, file_path.size() * sizeof(wchar_t), file_path.data(), file_path.size() * sizeof(wchar_t));
+				sz_name[file_path.size()] = L'\0';
+				module = ::LoadLibraryW(sz_name);
+				delete[] sz_name;
+			}
+			else
+			{
+				// Zero-terminated source. 
+				module = ::LoadLibraryW(file_path.data());
+			}
+
+			if (module)
+			{
+				typedef bool(*does_implement_srfg_cryptoengine_t)(void);
+				auto does_implement_srfg_cryptoengine = (::GetProcAddress(module, "does_implement_srfg_cryptoengine"));
+
+				if (does_implement_srfg_cryptoengine && does_implement_srfg_cryptoengine())
+				{
+					typedef srfg::cryptoengine* (*instantiate_engine_t)(void);
+					const auto instantiate_engine = reinterpret_cast<instantiate_engine_t>(::GetProcAddress(module, "instantiate_engine"));
+
+					if (instantiate_engine)
+					{
+						if (auto engine = instantiate_engine())
+						{
+							_engines[engine->get_uuid()] = std::shared_ptr<srfg::cryptoengine>(engine);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	cryptoselector::switch_engine_result cryptoselector::switch_engine(std::string_view file_name)
 	{
 		::HMODULE module{};

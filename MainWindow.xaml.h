@@ -3,6 +3,7 @@
 
 #pragma once
 #include "MainWindow.g.h"
+#include "ViewModelHub.h"
 
 using namespace winrt::Microsoft::UI::Xaml;
 using namespace winrt::Windows::Foundation;
@@ -20,7 +21,7 @@ namespace winrt::Sarcophagus::implementation
 
 	private:
 		Sarcophagus::FileSerializer _fileSerializer{FileSerializer::GetInstance()};
-		Sarcophagus::MainVM _vm{MainVM::GetInstance()};
+		Sarcophagus::MainVM _vm{::Sarcophagus::ViewModelHub::GetInstance().MainVM()};
 	};
 }
 

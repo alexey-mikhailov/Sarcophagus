@@ -7,8 +7,10 @@
 #include "CredEditor.g.cpp"
 #endif
 
+#include "DialogTools.h"
 #include "InternalCryptoTool.h"
 #include "SarcophagusCommon.h"
+#include "ViewModelHub.h"
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -23,9 +25,9 @@ namespace winrt::Sarcophagus::implementation
 		InitializeComponent();
 	}
 
-	void CredEditor::Init(Sarcophagus::MainVM const& vm)
+	void CredEditor::Init()
 	{
-		_vm = vm;
+		_vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 		_oldName = _vm.CredentialTemplate().Name();
 	}
 
@@ -66,13 +68,7 @@ namespace winrt::Sarcophagus::implementation
 		}
 		else
 		{
-			Controls::ContentDialog dialog{};
-			Controls::TextBlock textBlock{};
-			textBlock.Text(L"Passwords do not match. ");
-			dialog.Content(textBlock);
-			dialog.CloseButtonText(L"OK");
-			dialog.XamlRoot(XamlRoot());
-			dialog.ShowAsync();
+			::Sarcophagus::ShowErrorAsync(L"Passwords do not match. ");
 			return;
 		}
 

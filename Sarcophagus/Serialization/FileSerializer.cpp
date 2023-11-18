@@ -2,6 +2,7 @@
 #include "FileSerializer.h"
 
 #include "App.xaml.h"
+#include "DialogTools.h"
 #include "FileProtocol_0_0_0_1.h"
 #include "InternalCryptoTool.h"
 #include "SarcophagusCommon.h"
@@ -105,14 +106,7 @@ namespace winrt::Sarcophagus::implementation
 							
 							if (pullDataResult != PullDataResult::Success)
 							{
-								const auto mainWindow = App::GetInstance().Window();
-								Controls::ContentDialog dialog{};
-								Controls::TextBlock textBlock{};
-								textBlock.Text(errorText);
-								dialog.Content(textBlock);
-								dialog.CloseButtonText(L"OK");
-								dialog.XamlRoot(mainWindow.Content().XamlRoot());
-								co_await dialog.ShowAsync();
+								co_await ::Sarcophagus::ShowErrorAsync(errorText);
 							}
 						}
 					}
@@ -161,22 +155,14 @@ namespace winrt::Sarcophagus::implementation
 			pwdOk &= memcmp(reinterpret_cast<void*>(keyBuff), _storageKeyBuff, _storageKeySize) == 0;
 		}
 
-		if (!pwdOk)
+		if (pwdOk)
 		{
-			const auto mainWindow = App::GetInstance().Window();
-			Controls::ContentDialog dialog{};
-			Controls::TextBlock textBlock{};
-			textBlock.Text(L"Wrong password. ");
-			dialog.Content(textBlock);
-			dialog.CloseButtonText(L"OK");
-			dialog.XamlRoot(mainWindow.Content().XamlRoot());
-			co_await dialog.ShowAsync();
-
-			co_return false;
+			co_return true;
 		}
 		else
 		{
-			co_return true;
+			co_await ::Sarcophagus::ShowErrorAsync(L"Wrong password. ");
+			co_return false;
 		}
 	}
 

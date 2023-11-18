@@ -1,8 +1,6 @@
 // cryptoengine_abstracts.cpp : Defines the functions for the static library.
 //
 
-#include "pch.h"
-#include "framework.h"
 #include "cryptoengine_abstracts.h"
 
 // TODO: For srfg::guid_t, is it safer to use SIMD?

@@ -1,8 +1,11 @@
 ﻿#include "pch.h"
 #include "SarcophagusCommands.h"
 
+#include "cryptoengine_abstracts.h"
+#include "cryptoselector.h"
 #include "InternalCryptoTool.h"
 #include "SarcophagusCommon.h"
+#include "ViewModelHub.h"
 
 #if __has_include("EditCredentialCommand.g.cpp")
 #include "EditCredentialCommand.g.cpp"
@@ -16,19 +19,22 @@
 #if __has_include("CopyCredentialCommand.g.cpp")
 #include "CopyCredentialCommand.g.cpp"
 #endif
+#if __has_include("ChooseCryptoengineCommand.g.cpp")
+#include "ChooseCryptoengineCommand.g.cpp"
+#endif
 
 namespace winrt::Sarcophagus::implementation
 {
 	void AddCredentialCommand::Execute(IInspectable const&)
 	{
-		Sarcophagus::MainVM mainVM = Sarcophagus::MainVM::GetInstance();
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 		mainVM.Credentials().Append(Sarcophagus::Credential(L"New credential", L""));
 		FileSerializer::GetInstance().MakeDirty();
 	}
 
 	void RemoveCredentialCommand::Execute(IInspectable const& parameter)
 	{
-		Sarcophagus::MainVM mainVM = Sarcophagus::MainVM::GetInstance();
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 
 		if (auto credential = parameter.try_as<Sarcophagus::Credential>())
 		{
@@ -44,7 +50,7 @@ namespace winrt::Sarcophagus::implementation
 
 	void EditCredentialCommand::Execute(IInspectable const& parameter)
 	{
-		Sarcophagus::MainVM mainVM = Sarcophagus::MainVM::GetInstance();
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 
 		if (auto credential = parameter.try_as<Sarcophagus::Credential>())
 		{
@@ -55,7 +61,7 @@ namespace winrt::Sarcophagus::implementation
 
 	void CopyCredentialCommand::Execute(IInspectable const& parameter)
 	{
-		Sarcophagus::MainVM mainVM = Sarcophagus::MainVM::GetInstance();
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 
 		if (auto credential = parameter.try_as<Sarcophagus::Credential>())
 		{
@@ -81,6 +87,28 @@ namespace winrt::Sarcophagus::implementation
 			delete pwdBuff;
 
 			winrt::Windows::ApplicationModel::DataTransfer::Clipboard::SetContent(dataPackage);
+		}
+	}
+
+	void ChooseCryptoengineCommand::Execute(IInspectable const& parameter)
+	{
+		if (auto cryptoengine = parameter.try_as<Sarcophagus::CryptoengineVM>())
+		{
+			srfg::guid_t uuid;
+			uuid.raw64[0] = cryptoengine.UuidPart1();
+			uuid.raw64[1] = cryptoengine.UuidPart2();
+
+			srfg::cryptoselector::get_instance().switch_engine(uuid);
+
+			if (::Sarcophagus::ViewModelHub::GetInstance().ChooseCryptoengineVM().Target() == ChooseCryptoengineTarget::NewFile)
+			{
+				::Sarcophagus::ViewModelHub::GetInstance().MainVM().PageId(PageId::Main);
+			}
+			else if (::Sarcophagus::ViewModelHub::GetInstance().ChooseCryptoengineVM().Target() == ChooseCryptoengineTarget::SaveFile)
+			{
+				Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+				mainVM.SaveFileCommand().Execute(nullptr);
+			}
 		}
 	}
 }

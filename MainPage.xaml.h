@@ -13,8 +13,7 @@ namespace winrt::Sarcophagus::implementation
 	struct MainPage : MainPageT<MainPage>
 	{
 		MainPage();
-
-		void Init(Sarcophagus::MainVM const& vm);
+		void Init();
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 

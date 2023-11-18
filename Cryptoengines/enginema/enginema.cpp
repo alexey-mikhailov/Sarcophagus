@@ -61,6 +61,16 @@ namespace srfg
 		return guid_t { 0x34ae9cbf5d9c10ff, 0x04be57a1b3c9d0b0 };
 	}
 
+	std::string enginema::get_name() const
+	{
+		return "Enginema";
+	}
+
+	std::wstring enginema::get_wname() const
+	{
+		return L"Enginema";
+	}
+
 	std::vector<std::pair<int, int>> enginema::create_rotor(size_t key_size, uint8_t const* key)
 	{
 		std::vector<std::pair<int, int>> rotor;
@@ -71,7 +81,7 @@ namespace srfg
 			uint8_t v = key[(0x100 - key_left) % key_size];
 
 			bool searching = true;
-			int step = 10 * key_size;
+			uint64_t step = 10 * key_size;
 			while (searching)
 			{
 				searching = false;
@@ -80,7 +90,7 @@ namespace srfg
 				{
 					if (pair.second == v)
 					{
-						v = (v + step) % 0x100;
+						v = (v + static_cast<uint8_t>(step)) % 0x100;
 						searching = true;
 						if (step > 1) --step;
 						break;
@@ -88,7 +98,7 @@ namespace srfg
 				}
 			}
 
-			rotor.emplace_back(0x100 - key_left, v);
+			rotor.emplace_back(0x100 - static_cast<int>(key_left), v);
 			--key_left;
 		}
 

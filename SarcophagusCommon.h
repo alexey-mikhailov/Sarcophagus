@@ -3,9 +3,15 @@
 #define nameof(x) (#x)
 #define wnameof(x) (L#x)
 
+using namespace winrt::Windows::Foundation;
+using namespace winrt::Microsoft::UI::Xaml;
+using namespace winrt::Microsoft::UI::Xaml::Controls;
+
 namespace Sarcophagus
 {
 	constexpr wchar_t* EmptyString = L"";
+	static TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> EmptyTypedEventHandler = [](ContentDialog, ContentDialogButtonClickEventArgs) {};
+
 	HWND GetWindowHandle(winrt::Microsoft::UI::Xaml::Window window);
 	void Assert(bool expression, int32_t reason, const wchar_t* reasonStr, const wchar_t* message, const char* file, int line);
 	void Fail(int32_t reason, const wchar_t* reasonStr, const wchar_t* message, const char* file, int line);

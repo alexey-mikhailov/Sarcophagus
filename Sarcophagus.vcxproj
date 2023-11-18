@@ -116,9 +116,15 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChooseCryptoenginePage.xaml.h">
+      <DependentUpon>ChooseCryptoenginePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="ChooseCryptoengineVM.h" />
     <ClInclude Include="CredEditor.xaml.h">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="DialogTools.h" />
     <ClInclude Include="FileMenuCommands.h" />
     <ClInclude Include="InternalCryptoTool.h" />
     <ClInclude Include="Native\cryptoselector.h" />
@@ -140,9 +146,13 @@
     <ClInclude Include="SarcophagusCommon.h" />
     <ClInclude Include="Serialization\FileProtocol_0_0_0_1.h" />
     <ClInclude Include="Serialization\FileSerializer.h" />
+    <ClInclude Include="ViewModelHub.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
+    <Page Include="ChooseCryptoenginePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CredEditor.xaml" />
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
@@ -150,9 +160,15 @@
     <Page Include="MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChooseCryptoenginePage.xaml.cpp">
+      <DependentUpon>ChooseCryptoenginePage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="ChooseCryptoengineVM.cpp" />
     <ClCompile Include="CredEditor.xaml.cpp">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClCompile>
+    <ClCompile Include="DialogTools.cpp" />
     <ClCompile Include="FileMenuCommands.cpp" />
     <ClCompile Include="InternalCryptoTool.cpp" />
     <ClCompile Include="Native\cryptoselector.cpp" />
@@ -175,6 +191,7 @@
     <ClCompile Include="SarcophagusCommon.cpp" />
     <ClCompile Include="Serialization\FileProtocol_0_0_0_1.cpp" />
     <ClCompile Include="Serialization\FileSerializer.cpp" />
+    <ClCompile Include="ViewModelHub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Sarcophagus.idl" />

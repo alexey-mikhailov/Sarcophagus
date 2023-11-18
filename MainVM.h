@@ -11,7 +11,7 @@ namespace winrt::Sarcophagus::implementation
 		Credential() = default;
 		Credential(winrt::hstring name, winrt::hstring password) : _name(name), _password(password) {}
 
-		Sarcophagus::MainVM MainVM() const { return Sarcophagus::MainVM::GetInstance(); }
+		winrt::Sarcophagus::MainVM MainVM() const;
 
 		winrt::hstring Name() const { return _name; }
 		void Name(const winrt::hstring& name);
@@ -32,12 +32,6 @@ namespace winrt::Sarcophagus::implementation
 	{
 		MainVM();
 
-		static Sarcophagus::MainVM GetInstance()
-		{
-			static Sarcophagus::MainVM instance = winrt::make<Sarcophagus::implementation::MainVM>();
-			return instance;
-		}
-
 		Sarcophagus::PageId PageId() { return _pageId; }
 		void PageId(winrt::Sarcophagus::PageId pageId);
 
@@ -52,12 +46,14 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::RemoveCredentialCommand RemoveCredentialCommand() const { return _removeCredentialCommand; }
 		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
 		Sarcophagus::CopyCredentialCommand CopyCredentialCommand() const { return _copyCredentialCommand; }
+		Sarcophagus::ChooseCryptoengineToCreateFileCommand ChooseCryptoengineToCreateFileCommand() const { return _chooseCryptoengineToCreateFileCommand; }
 		Sarcophagus::NewFileCommand NewFileCommand() const { return _newFileCommand; }
 		Sarcophagus::OpenFileCommand OpenFileCommand() const { return _openFileCommand; }
+		Sarcophagus::ChooseCryptoengineToSaveFileCommand ChooseCryptoengineToSaveFileCommand() const { return _chooseCryptoengineToSaveFileCommand; }
 		Sarcophagus::SaveFileCommand SaveFileCommand() const { return _saveFileCommand; }
 
 	private:
-		Sarcophagus::PageId _pageId = Sarcophagus::PageId::Main;
+		Sarcophagus::PageId _pageId = Sarcophagus::PageId::ChooseCryptoengine;
 		Sarcophagus::Credential _credentialTemplate = nullptr;
 		IObservableVector<Sarcophagus::Credential> _credentials;
 
@@ -65,8 +61,10 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::RemoveCredentialCommand _removeCredentialCommand;
 		Sarcophagus::EditCredentialCommand _editCredentialCommand;
 		Sarcophagus::CopyCredentialCommand _copyCredentialCommand;
+		Sarcophagus::ChooseCryptoengineToCreateFileCommand _chooseCryptoengineToCreateFileCommand;
 		Sarcophagus::NewFileCommand _newFileCommand;
 		Sarcophagus::OpenFileCommand _openFileCommand;
+		Sarcophagus::ChooseCryptoengineToSaveFileCommand _chooseCryptoengineToSaveFileCommand;
 		Sarcophagus::SaveFileCommand _saveFileCommand;
 
 		winrt::event<PageChangedDelegate> _pageChanged;

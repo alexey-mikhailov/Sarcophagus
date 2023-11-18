@@ -36,5 +36,7 @@ namespace srfg
 		virtual void encrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst) = 0;
 		virtual void decrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst) = 0;
 		virtual guid_t get_uuid() const = 0;
+		virtual std::string get_name() const = 0;
+		virtual std::wstring get_wname() const = 0;
 	};
 }

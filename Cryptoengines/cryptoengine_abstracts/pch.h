@@ -11,5 +11,6 @@
 #include "framework.h"
 #include <cstdint>
 #include <functional>
+#include <string>
 
 #endif //PCH_H

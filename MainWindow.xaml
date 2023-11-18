@@ -29,7 +29,7 @@
                     <MenuBarItem Title="File">
                         <MenuFlyoutItem Text="New" Command="{x:Bind MainVM.NewFileCommand}" CommandParameter="{x:Bind}" />
                         <MenuFlyoutItem Text="Open" Command="{x:Bind MainVM.OpenFileCommand}" CommandParameter="{x:Bind}" />
-                        <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.SaveFileCommand}" CommandParameter="{x:Bind}" />
+                        <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.ChooseCryptoengineToSaveFileCommand}" CommandParameter="{x:Bind}" />
                     </MenuBarItem>
                 </MenuBar>
             </StackPanel>

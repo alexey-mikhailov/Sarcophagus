@@ -9,7 +9,7 @@ namespace winrt::Sarcophagus::implementation
 	struct CredEditor : CredEditorT<CredEditor>
 	{
 		CredEditor();
-		void Init(Sarcophagus::MainVM const& vm);
+		void Init();
 		void OnOk(IInspectable const& sender, RoutedEventArgs const& e);
 		void OnCancel(IInspectable const& sender, RoutedEventArgs const& e);
 

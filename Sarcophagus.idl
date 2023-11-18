@@ -2,18 +2,78 @@ namespace Sarcophagus
 {
 	delegate void PageChangedDelegate(PageId pageId);
 
-	// 
-	// View-Models
-	// 
-
-	enum PageId
-	{
-		Main,
-		EditCredential
-	};
-
 	enum PullDataResult { Success, DecryptionFailure };
 	enum PushDataResult { Success, EncryptionFailure };
+
+	runtimeclass FileSerializer : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		FileSerializer();
+		static FileSerializer GetInstance();
+
+		UInt64 GetStorageKeySize();
+		UInt64 GetStorageKeyBuff();
+		void SetStorageKey(UInt64 size, UInt64 buff);
+		void MakeDirty();
+		void ClearDirty();
+
+		void Initialize();
+		void OpenFile(Windows.Storage.StorageFile file);
+		void SaveFile(Windows.Storage.StorageFile file);
+		Windows.Foundation.IAsyncAction OpenFileAsync(Windows.Storage.StorageFile file);
+		Windows.Foundation.IAsyncAction SaveFileAsync(Windows.Storage.StorageFile file);
+
+		Windows.Foundation.IAsyncOperation<Boolean> AuthAsync(UInt64 keySize, UInt64 keyBuff);
+
+		Boolean IsDirty{ get; };
+		Microsoft.UI.Xaml.Visibility IsDirtyVisibility;
+	}
+
+	runtimeclass DecisionBox
+	{
+		DecisionBox();
+		DecisionBox(String text);
+
+		Windows.Foundation.IAsyncAction ShowAsync();
+
+		String Text{ get; set; };
+		String Button1Text{ get; set; };
+		String Button2Text{ get; set; };
+		String ButtonCloseText{ get; set; };
+		Windows.Foundation.TypedEventHandler<Microsoft.UI.Xaml.Controls.ContentDialog, Microsoft.UI.Xaml.Controls.ContentDialogButtonClickEventArgs> Button1Handler{ get; set; };
+		Windows.Foundation.TypedEventHandler<Microsoft.UI.Xaml.Controls.ContentDialog, Microsoft.UI.Xaml.Controls.ContentDialogButtonClickEventArgs> Button2Handler{ get; set; };
+		Windows.Foundation.TypedEventHandler<Microsoft.UI.Xaml.Controls.ContentDialog, Microsoft.UI.Xaml.Controls.ContentDialogButtonClickEventArgs> ButtonCloseHandler{ get; set; };
+	}
+
+	enum PasswordDecisionStatus
+	{
+		Ok, 
+		Cancel
+	};
+
+	struct PasswordDecisionResult
+	{
+		PasswordDecisionStatus Status;
+		String Password;
+	};
+
+	runtimeclass PasswordDecisionBox
+	{
+		PasswordDecisionBox();
+		PasswordDecisionBox(String text, String placeholderText);
+
+		Windows.Foundation.IAsyncOperation<PasswordDecisionResult> ShowAsync();
+
+		String Text{ get; set; };
+		String PlaceholderText{ get; set; };
+		Windows.Foundation.TypedEventHandler<Microsoft.UI.Xaml.Controls.ContentDialog, Microsoft.UI.Xaml.Controls.ContentDialogButtonClickEventArgs> ButtonOkHandler{ get; set; };
+		Windows.Foundation.TypedEventHandler<Microsoft.UI.Xaml.Controls.ContentDialog, Microsoft.UI.Xaml.Controls.ContentDialogButtonClickEventArgs> ButtonCancelHandler{ get; set; };
+	}
+
+
+
+	// 
+	// Commands
+	// 
 
 	[default_interface]
 	runtimeclass AddCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
@@ -40,6 +100,18 @@ namespace Sarcophagus
 	}
 
 	[default_interface]
+	runtimeclass ChooseCryptoengineToCreateFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		ChooseCryptoengineToCreateFileCommand();
+	}
+
+	[default_interface]
+	runtimeclass ChooseCryptoengineToSaveFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		ChooseCryptoengineToSaveFileCommand();
+	}
+
+	[default_interface]
 	runtimeclass NewFileCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		NewFileCommand();
@@ -60,6 +132,18 @@ namespace Sarcophagus
 		Int64 WindowHandle{ get; set; };
 	}
 
+	[default_interface]
+	runtimeclass ChooseCryptoengineCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		ChooseCryptoengineCommand();
+	}
+
+
+				
+	// 
+	// View-Models
+	// 
+
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
@@ -71,10 +155,16 @@ namespace Sarcophagus
 		String Password;
 	}
 
+	enum PageId
+	{
+		Main,
+		EditCredential,
+		ChooseCryptoengine,
+	};
+
 	runtimeclass MainVM
 	{
 		MainVM();
-		static MainVM GetInstance();
 
 		PageId PageId{ get; set; };
 		Credential CredentialTemplate{ get; set; };
@@ -84,35 +174,44 @@ namespace Sarcophagus
 		RemoveCredentialCommand RemoveCredentialCommand{ get; };
 		EditCredentialCommand EditCredentialCommand{ get; };
 		CopyCredentialCommand CopyCredentialCommand{ get; };
+		ChooseCryptoengineToCreateFileCommand ChooseCryptoengineToCreateFileCommand{ get; };
 		NewFileCommand NewFileCommand{ get; };
 		OpenFileCommand OpenFileCommand{ get; };
+		ChooseCryptoengineToSaveFileCommand ChooseCryptoengineToSaveFileCommand{ get; };
 		SaveFileCommand SaveFileCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
 	}
 
-	runtimeclass FileSerializer : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	runtimeclass CryptoengineVM : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
-		FileSerializer();
-		static FileSerializer GetInstance();
+		CryptoengineVM();
+		CryptoengineVM(String name, UInt64 uuidPart1, UInt64 uuidPart2);
 
-		UInt64 GetStorageKeySize();
-		UInt64 GetStorageKeyBuff();
-		void SetStorageKey(UInt64 size, UInt64 buff);
-		void MakeDirty();
-		void ClearDirty();
+		ChooseCryptoengineVM ChooseCryptoengineVM{ get; };
 
-		void Initialize();
-		void OpenFile(Windows.Storage.StorageFile file);
-		void SaveFile(Windows.Storage.StorageFile file);
-		Windows.Foundation.IAsyncAction OpenFileAsync(Windows.Storage.StorageFile file);
-		Windows.Foundation.IAsyncAction SaveFileAsync(Windows.Storage.StorageFile file);
-
-		Windows.Foundation.IAsyncOperation<Boolean> AuthAsync(UInt64 keySize, UInt64 keyBuff);
-
-		Boolean IsDirty{ get; };
-		Microsoft.UI.Xaml.Visibility IsDirtyVisibility;
+		String Name;
+		UInt64 UuidPart1{ get; };
+		UInt64 UuidPart2{ get; };
 	}
+
+	enum ChooseCryptoengineTarget
+	{
+		NewFile, 
+		SaveFile
+	};
+
+	runtimeclass ChooseCryptoengineVM
+	{
+		ChooseCryptoengineVM();
+		void Rescan();
+
+		ChooseCryptoengineTarget Target{ get; set; };
+		Windows.Foundation.Collections.IObservableVector<CryptoengineVM> Cryptoengines{ get; };
+		ChooseCryptoengineCommand ChooseCryptoengineCommand{ get; };
+	}
+
+
 
 
 
@@ -139,5 +238,11 @@ namespace Sarcophagus
 	{
 		CredEditor();
 		MainVM MainVM{ get; };
+	}
+
+	runtimeclass ChooseCryptoenginePage : Microsoft.UI.Xaml.Controls.Page
+	{
+		ChooseCryptoenginePage();
+		ChooseCryptoengineVM ChooseCryptoengineVM{ get; };
 	}
 }

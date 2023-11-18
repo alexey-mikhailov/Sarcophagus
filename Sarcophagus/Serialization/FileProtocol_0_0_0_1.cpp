@@ -4,6 +4,7 @@
 #include "cryptoselector.h"
 #include "MainVM.h"
 #include "SarcophagusCommon.h"
+#include "ViewModelHub.h"
 
 namespace Sarcophagus
 {
@@ -58,7 +59,7 @@ namespace Sarcophagus
 
 				if (co_await winrt::Sarcophagus::FileSerializer::GetInstance().AuthAsync(keyInBytes, reinterpret_cast<uint64_t>(key)))
 				{
-					const winrt::Sarcophagus::MainVM vm = winrt::Sarcophagus::MainVM::GetInstance();
+					const winrt::Sarcophagus::MainVM vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 					vm.Credentials().Clear();
 
 					uint32_t credentialCount = *reinterpret_cast<uint32_t*>(dstPtr);
@@ -127,7 +128,7 @@ namespace Sarcophagus
 			rawWriter.WriteBytes({ keyBuff, (uint32_t)keySize });
 			engine->setup(keySize, keyBuff);
 
-			const winrt::Sarcophagus::MainVM vm = winrt::Sarcophagus::MainVM::GetInstance();
+			const winrt::Sarcophagus::MainVM vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 			const uint32_t credentialCount = vm.Credentials().Size();
 			rawWriter.WriteUInt32(credentialCount);
 

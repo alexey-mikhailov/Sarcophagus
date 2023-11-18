@@ -10,17 +10,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Name="MainPage1">
-
-    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Disabled"
-                  Grid.Row="1" 
-                  Padding="0,-30,0,0">
-        <StackPanel>
-            <Button Content="Add" 
-                    Command="{x:Bind MainVM.AddCredentialCommand}" 
-                    HorizontalAlignment="Right" 
-                    Margin="0,0,10,0" />
-            <Border Padding="5">
+    <Grid Padding="0,-30,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Content="Add" 
+                Command="{x:Bind MainVM.AddCredentialCommand}" 
+                HorizontalAlignment="Right" 
+                Margin="0,0,10,0" />
+        <Border Padding="5" Grid.Row="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" 
+                          VerticalScrollBarVisibility="Visible">
                 <ItemsControl x:Name="itemsControlAccs" ItemsSource="{x:Bind MainVM.Credentials}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -46,7 +47,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </Border>
-        </StackPanel>
-    </ScrollViewer>
+            </ScrollViewer>
+        </Border>
+    </Grid>
 </Page>
