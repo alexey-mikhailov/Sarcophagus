@@ -17,6 +17,7 @@ namespace winrt::Sarcophagus::implementation
 
 	private:
 		Sarcophagus::MainVM _vm{nullptr};
+		winrt::hstring _oldName;
 	};
 }
 

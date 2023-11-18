@@ -23,9 +23,11 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" IsHitTestVisible="True">
                 <Image Width="32" Height="32" Margin="4" VerticalAlignment="Center" Source="Assets/Images/Icon_128x128.png" />
-                <TextBlock Text="Sarcophagus" VerticalAlignment="Center" Margin="4,0,8,0" FontSize="10" />
+                <TextBlock Text="Sarcophagus" VerticalAlignment="Center" Margin="4,0,0,0" FontSize="10" />
+                <TextBlock Text="*" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="10" Visibility="{x:Bind FileSerializer.IsDirtyVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <MenuBar VerticalAlignment="Bottom" Margin="0,0,0,0">
                     <MenuBarItem Title="File">
+                        <MenuFlyoutItem Text="New" Command="{x:Bind MainVM.NewFileCommand}" CommandParameter="{x:Bind}" />
                         <MenuFlyoutItem Text="Open" Command="{x:Bind MainVM.OpenFileCommand}" CommandParameter="{x:Bind}" />
                         <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.SaveFileCommand}" CommandParameter="{x:Bind}" />
                     </MenuBarItem>

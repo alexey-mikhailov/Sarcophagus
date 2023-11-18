@@ -52,6 +52,7 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::RemoveCredentialCommand RemoveCredentialCommand() const { return _removeCredentialCommand; }
 		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
 		Sarcophagus::CopyCredentialCommand CopyCredentialCommand() const { return _copyCredentialCommand; }
+		Sarcophagus::NewFileCommand NewFileCommand() const { return _newFileCommand; }
 		Sarcophagus::OpenFileCommand OpenFileCommand() const { return _openFileCommand; }
 		Sarcophagus::SaveFileCommand SaveFileCommand() const { return _saveFileCommand; }
 
@@ -64,6 +65,7 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::RemoveCredentialCommand _removeCredentialCommand;
 		Sarcophagus::EditCredentialCommand _editCredentialCommand;
 		Sarcophagus::CopyCredentialCommand _copyCredentialCommand;
+		Sarcophagus::NewFileCommand _newFileCommand;
 		Sarcophagus::OpenFileCommand _openFileCommand;
 		Sarcophagus::SaveFileCommand _saveFileCommand;
 

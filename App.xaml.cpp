@@ -5,9 +5,11 @@
 
 #include "App.xaml.h"
 
+#include "cryptoselector.h"
 #include "InternalCryptoTool.h"
 #include "MainWindow.xaml.h"
 #include "SarcophagusCommon.h"
+#include "Serialization/FileSerializer.h"
 
 using namespace winrt;
 using namespace winrt::Windows::Foundation;
@@ -15,6 +17,8 @@ using namespace winrt::Microsoft::UI::Xaml::Controls;
 using namespace winrt::Microsoft::UI::Xaml::Navigation;
 using namespace winrt::Sarcophagus::implementation;
 using namespace ::Sarcophagus;
+
+App* App::_instance;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,6 +29,7 @@ using namespace ::Sarcophagus;
 /// </summary>
 App::App()
 {
+	_instance = this;
 	InitializeComponent();
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -45,13 +50,16 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const&)
 {
-	window = make<MainWindow>();
+	_window = make<MainWindow>();
+
+	// Initialize serializer.
+	FileSerializer::GetInstance().Initialize();
 
 	// Initialize internal crypto tool.
 	InternalCryptoTool::GetInstance().Setup(0x100, CipherTable);
 
 	// Set window size
-	if (HWND hWnd = GetWindowHandle(window))
+	if (HWND hWnd = GetWindowHandle(_window))
 	{
 		// Retrieve the WindowId that corresponds to hWnd.
 		winrt::Microsoft::UI::WindowId windowId = Microsoft::UI::GetWindowIdFromWindow(hWnd);
@@ -63,6 +71,6 @@ void App::OnLaunched(LaunchActivatedEventArgs const&)
 		}
 	}
 
-	window.ExtendsContentIntoTitleBar(true);
-	window.Activate();
+	_window.ExtendsContentIntoTitleBar(true);
+	_window.Activate();
 }

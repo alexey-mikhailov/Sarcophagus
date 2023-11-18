@@ -23,6 +23,7 @@ namespace winrt::Sarcophagus::implementation
 	{
 		Sarcophagus::MainVM mainVM = Sarcophagus::MainVM::GetInstance();
 		mainVM.Credentials().Append(Sarcophagus::Credential(L"New credential", L""));
+		FileSerializer::GetInstance().MakeDirty();
 	}
 
 	void RemoveCredentialCommand::Execute(IInspectable const& parameter)
@@ -37,6 +38,8 @@ namespace winrt::Sarcophagus::implementation
 				mainVM.Credentials().RemoveAt(index);
 			}
 		}
+
+		FileSerializer::GetInstance().MakeDirty();
 	}
 
 	void EditCredentialCommand::Execute(IInspectable const& parameter)
@@ -75,6 +78,8 @@ namespace winrt::Sarcophagus::implementation
 				reinterpret_cast<wchar_t*>(pwdBuff),
 				static_cast<hstring::size_type>(pwdSize / 2)
 			});
+			delete pwdBuff;
+
 			winrt::Windows::ApplicationModel::DataTransfer::Clipboard::SetContent(dataPackage);
 		}
 	}

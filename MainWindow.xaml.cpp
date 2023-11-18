@@ -63,6 +63,7 @@ namespace winrt::Sarcophagus::implementation
 				SendMessage(hWnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIcon));
 			}
 
+			_vm.NewFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 			_vm.OpenFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 			_vm.SaveFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 		}

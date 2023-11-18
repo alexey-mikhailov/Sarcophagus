@@ -1,8 +1,14 @@
 #include "pch.h"
 #include "FileMenuCommands.h"
 
+#include "App.xaml.h"
+#include "InternalCryptoTool.h"
 #include "SarcophagusCommon.h"
+#include "Serialization/FileSerializer.h"
 
+#if __has_include("NewFileCommand.g.cpp")
+#include "NewFileCommand.g.cpp"
+#endif
 #if __has_include("OpenFileCommand.g.cpp")
 #include "OpenFileCommand.g.cpp"
 #endif
@@ -10,11 +16,53 @@
 #include "SaveFileCommand.g.cpp"
 #endif
 
+using namespace winrt::Microsoft::UI::Xaml;
 using namespace winrt::Windows::Storage;
 using namespace winrt::Windows::Storage::Pickers;
 
 namespace winrt::Sarcophagus::implementation
 {
+	// TODO: NewFileCommand: Choose encryption plugin.
+
+	void NewFileCommand::Execute(IInspectable const&)
+	{
+		ExecuteAsync();
+	}
+
+	IAsyncAction NewFileCommand::ExecuteAsync()
+	{
+		if (FileSerializer::GetInstance().IsDirty())
+		{
+			auto mainWindow = App::GetInstance().Window();
+
+			Controls::ContentDialog dialog{};
+			Controls::TextBlock textBlock{};
+			textBlock.Text(L"Do you want to save this file?");
+			textBlock.VerticalAlignment(VerticalAlignment::Center);
+			dialog.Content(textBlock);
+			dialog.PrimaryButtonText(L"Yes");
+			dialog.PrimaryButtonClick([mainWindow](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
+			{
+				MainVM::GetInstance().SaveFileCommand().Execute(mainWindow);
+			});
+			dialog.SecondaryButtonText(L"No");
+			dialog.SecondaryButtonClick([mainWindow](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
+			{
+				MainVM::GetInstance().Credentials().Clear();
+				FileSerializer::GetInstance().ClearDirty();
+			});
+
+			dialog.CloseButtonText(L"Cancel");
+			dialog.XamlRoot(mainWindow.Content().XamlRoot());
+			co_await dialog.ShowAsync();
+		}
+		else
+		{
+			MainVM::GetInstance().Credentials().Clear();
+			FileSerializer::GetInstance().ClearDirty();
+		}
+	}
+
 	void OpenFileCommand::Execute(IInspectable const&)
 	{
 		ExecuteAsync();
@@ -22,58 +70,103 @@ namespace winrt::Sarcophagus::implementation
 
 	IAsyncAction OpenFileCommand::ExecuteAsync()
 	{
-		auto filePicker = FileOpenPicker();
-		filePicker.SuggestedStartLocation(Pickers::PickerLocationId::ComputerFolder);
-		filePicker.FileTypeFilter().Append(L".bin");
-		auto initializeWithWindow{ filePicker.as<::IInitializeWithWindow>() };
+		bool isOpenNeeded = true;
+		bool isSaveNeeded = false;
+		auto mainWindow = App::GetInstance().Window();
 
-		initializeWithWindow->Initialize(_hWnd);
-
-		if (StorageFile pickedFile = co_await filePicker.PickSingleFileAsync())
+		if (FileSerializer::GetInstance().IsDirty())
 		{
-			if (Streams::IRandomAccessStream stream = co_await pickedFile.OpenAsync(FileAccessMode::Read))
+			Controls::ContentDialog dialog{};
+			Controls::TextBlock textBlock{};
+			textBlock.Text(L"Do you want to save this file?");
+			textBlock.VerticalAlignment(VerticalAlignment::Center);
+			dialog.Content(textBlock);
+			dialog.PrimaryButtonText(L"Yes");
+			dialog.PrimaryButtonClick([&isSaveNeeded, mainWindow](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
 			{
-				// TODO Encrypt buffer, copy from mem to disk
+				isSaveNeeded = true;
+			});
+			dialog.SecondaryButtonText(L"No");
+			dialog.CloseButtonText(L"Cancel");
+			dialog.CloseButtonClick([&isOpenNeeded, mainWindow](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
+			{
+				isOpenNeeded = false;
+			});
 
-				const winrt::Windows::Storage::Streams::DataReader reader(stream.GetInputStreamAt(0));
+			dialog.XamlRoot(mainWindow.Content().XamlRoot());
+			co_await dialog.ShowAsync();
+		}
 
-				if (co_await reader.LoadAsync(~0u))
+		if (isSaveNeeded)
+		{
+			MainVM::GetInstance().SaveFileCommand().Execute(mainWindow);
+		}
+		else if (isOpenNeeded)
+		{
+			auto filePicker = FileOpenPicker();
+			filePicker.SuggestedStartLocation(Pickers::PickerLocationId::ComputerFolder);
+			filePicker.FileTypeFilter().Append(L".bin");
+			auto initializeWithWindow{ filePicker.as<::IInitializeWithWindow>() };
+
+			initializeWithWindow->Initialize(_hWnd);
+
+			if (StorageFile pickedFile = co_await filePicker.PickSingleFileAsync())
+			{
+				winrt::hstring password;
+				Controls::ContentDialog enterPwdDialog{};
+				Controls::StackPanel stackPanel{};
+				Controls::TextBlock textBlockPassword{};
+				Controls::Border space{};
+				Controls::PasswordBox textBoxPassword{};
+				stackPanel.Orientation(Controls::Orientation::Horizontal);
+				stackPanel.Children().Append(textBlockPassword);
+				stackPanel.Children().Append(space);
+				stackPanel.Children().Append(textBoxPassword);
+				textBlockPassword.Text(L"Password");
+				textBlockPassword.VerticalAlignment(VerticalAlignment::Center);
+				space.Width(5.0);
+				textBoxPassword.PlaceholderText(L"Enter file password");
+				textBoxPassword.Width(250.0);
+				textBoxPassword.Height(30.0);
+				enterPwdDialog.Content(stackPanel);
+				enterPwdDialog.PrimaryButtonText(L"OK");
+				enterPwdDialog.PrimaryButtonClick([&password, textBoxPassword](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
 				{
-					const Sarcophagus::MainVM vm = MainVM::GetInstance();
-					vm.Credentials().Clear();
+					password = textBoxPassword.Password();
+				});
+				enterPwdDialog.CloseButtonText(L"Close");
+				enterPwdDialog.XamlRoot(mainWindow.Content().XamlRoot());
+				co_await enterPwdDialog.ShowAsync();
 
-					const uint32_t credentialCount = reader.ReadUInt32();
-
-					for (uint32_t i = 0; i < credentialCount; ++i)
-					{
-						const uint32_t nameInBytes = reader.ReadUInt32();
-						SARCOPHAGUS_ASSERT(nameInBytes % 2 == 0, NULL, L"Number of bytes of cred.key should be even number. ");
-
-						const wchar_t* name = new wchar_t[nameInBytes / 2];
-						array_view nameBuffer{ (uint8_t*)name, nameInBytes };
-
-						reader.ReadBytes(nameBuffer);
-						winrt::hstring credentialName(name, nameInBytes / 2);
-						delete[] name;
-
-						const uint32_t passwordInBytes = reader.ReadUInt32();
-						SARCOPHAGUS_ASSERT(passwordInBytes % 2 == 0, NULL, L"Number of bytes of cred.value should be even number. ");
-
-						const wchar_t* password = new wchar_t[passwordInBytes / 2];
-						array_view passwordBuffer{ (uint8_t*)password, passwordInBytes };
-
-						reader.ReadBytes(passwordBuffer);
-						winrt::hstring credentialPassword(password, passwordInBytes / 2);
-						delete[] password;
-
-						vm.Credentials().Append(Sarcophagus::Credential(credentialName, credentialPassword));
-					}
+				if (password.empty())
+				{
+					Controls::ContentDialog dialog{};
+					Controls::TextBlock textBlock{};
+					textBlock.Text(L"Empty password is not allowed. ");
+					dialog.Content(textBlock);
+					dialog.CloseButtonText(L"OK");
+					dialog.XamlRoot(mainWindow.Content().XamlRoot());
+					co_await dialog.ShowAsync();
 				}
-
-				if (co_await stream.FlushAsync())
+				else
 				{
-					reader.Close();
-					stream.Close();
+					uint64_t pwdSize;
+					uint8_t* pwdBuff;
+					const ::Sarcophagus::InternalCryptoTool::EncryptResult result = ::Sarcophagus::InternalCryptoTool::GetInstance().Encrypt
+					(
+						sizeof(winrt::hstring::value_type) * textBoxPassword.Password().size(),
+						reinterpret_cast<const uint8_t*>(textBoxPassword.Password().c_str()),
+						&pwdSize,
+						&pwdBuff
+					);
+
+					SARCOPHAGUS_ASSERT(result == ::Sarcophagus::InternalCryptoTool::EncryptResult::Success, NULL, L"Internal encryption failed. ");
+					SARCOPHAGUS_ASSERT(pwdSize % 2 == 0, NULL, L"Enrypted password should be wide string (with even size). ");
+
+					FileSerializer::GetInstance().SetStorageKey(pwdSize, reinterpret_cast<uint64_t>(pwdBuff));
+					delete pwdBuff;
+
+					co_await FileSerializer::GetInstance().OpenFileAsync(pickedFile);
 				}
 			}
 		}
@@ -86,59 +179,84 @@ namespace winrt::Sarcophagus::implementation
 
 	IAsyncAction SaveFileCommand::ExecuteAsync()
 	{
-		wchar_t fileName[MAX_PATH];
-		if (GetModuleFileNameW(NULL, fileName, MAX_PATH))
+		auto mainWindow = App::GetInstance().Window();
+
+		winrt::hstring password;
+		Controls::ContentDialog enterPwdDialog{};
+		Controls::StackPanel stackPanel{};
+		Controls::TextBlock textBlockPassword{};
+		Controls::Border space{};
+		Controls::PasswordBox textBoxPassword{};
+		stackPanel.Orientation(Controls::Orientation::Horizontal);
+		stackPanel.Children().Append(textBlockPassword);
+		stackPanel.Children().Append(space);
+		stackPanel.Children().Append(textBoxPassword);
+		textBlockPassword.Text(L"Password");
+		textBlockPassword.VerticalAlignment(VerticalAlignment::Center);
+		space.Width(5.0);
+		textBoxPassword.PlaceholderText(L"Enter file password");
+		textBoxPassword.Width(250.0);
+		textBoxPassword.Height(30.0);
+		enterPwdDialog.Content(stackPanel);
+		enterPwdDialog.PrimaryButtonText(L"OK");
+		enterPwdDialog.PrimaryButtonClick([&password, textBoxPassword](Controls::ContentDialog, Controls::ContentDialogButtonClickEventArgs)
 		{
-			auto file = co_await StorageFile::GetFileFromPathAsync(fileName);
-			auto folder = co_await file.GetParentAsync();
-			auto localFolder = folder.Path();
+			password = textBoxPassword.Password();
+		});
+		enterPwdDialog.CloseButtonText(L"Close");
+		enterPwdDialog.XamlRoot(mainWindow.Content().XamlRoot());
+		co_await enterPwdDialog.ShowAsync();
 
-			auto filePicker = FileSavePicker();
-			filePicker.SuggestedStartLocation(Pickers::PickerLocationId::ComputerFolder);
-			auto fullPath = localFolder + L"\\data.bin";
-			filePicker.SuggestedFileName(fullPath);
-			auto extensions = winrt::single_threaded_vector<hstring>();
-			extensions.Append(L".bin");
-			filePicker.FileTypeChoices().Insert(L"sarcophagus binary file", extensions);
+		if (password.empty())
+		{
+			Controls::ContentDialog dialog{};
+			Controls::TextBlock textBlock{};
+			textBlock.Text(L"Empty password is not allowed. ");
+			dialog.Content(textBlock);
+			dialog.CloseButtonText(L"OK");
+			dialog.XamlRoot(mainWindow.Content().XamlRoot());
+			co_await dialog.ShowAsync();
+		}
+		else
+		{
+			uint64_t pwdSize;
+			uint8_t* pwdBuff;
+			const ::Sarcophagus::InternalCryptoTool::EncryptResult result = ::Sarcophagus::InternalCryptoTool::GetInstance().Encrypt
+			(
+				sizeof(winrt::hstring::value_type) * textBoxPassword.Password().size(),
+				reinterpret_cast<const uint8_t*>(textBoxPassword.Password().c_str()),
+				&pwdSize,
+				&pwdBuff
+			);
 
-			auto initializeWithWindow{ filePicker.as<::IInitializeWithWindow>() };
-			initializeWithWindow->Initialize(_hWnd);
+			SARCOPHAGUS_ASSERT(result == ::Sarcophagus::InternalCryptoTool::EncryptResult::Success, NULL, L"Internal encryption failed. ");
+			SARCOPHAGUS_ASSERT(pwdSize % 2 == 0, NULL, L"Enrypted password should be wide string (with even size). ");
 
-			if (StorageFile pickedFile = co_await filePicker.PickSaveFileAsync())
+			FileSerializer::GetInstance().SetStorageKey(pwdSize, reinterpret_cast<uint64_t>(pwdBuff));
+			delete pwdBuff;
+
+			wchar_t fileName[MAX_PATH];
+			if (GetModuleFileNameW(NULL, fileName, MAX_PATH))
 			{
-				if (Streams::IRandomAccessStream stream = co_await pickedFile.OpenAsync(FileAccessMode::ReadWrite))
+				auto file = co_await StorageFile::GetFileFromPathAsync(fileName);
+				auto folder = co_await file.GetParentAsync();
+				auto localFolder = folder.Path();
+
+				auto filePicker = FileSavePicker();
+				filePicker.SuggestedStartLocation(Pickers::PickerLocationId::ComputerFolder);
+				auto fullPath = localFolder + L"\\data.bin";
+				filePicker.SuggestedFileName(fullPath);
+				auto extensions = winrt::single_threaded_vector<hstring>();
+				extensions.Append(L".bin");
+				filePicker.FileTypeChoices().Insert(L"sarcophagus binary file", extensions);
+
+				auto initializeWithWindow{ filePicker.as<::IInitializeWithWindow>() };
+				initializeWithWindow->Initialize(_hWnd);
+
+				if (StorageFile pickedFile = co_await filePicker.PickSaveFileAsync())
 				{
-					// TODO Encrypt buffer, copy from mem to disk
-
-					const winrt::Sarcophagus::MainVM vm = MainVM::GetInstance();
-					const winrt::Windows::Storage::Streams::DataWriter writer(stream.GetOutputStreamAt(0));
-
-					const uint32_t credentialCount = vm.Credentials().Size();
-					writer.WriteUInt32(credentialCount);
-
-					for (auto credential : vm.Credentials())
-					{
-						const winrt::hstring name = credential.Name();
-						const uint32_t nameInBytes = name.size() * 2;
-
-						writer.WriteUInt32(nameInBytes);
-						writer.WriteBytes({ (uint8_t*)name.c_str(), nameInBytes });
-
-						const winrt::hstring password = credential.Password();
-						const uint32_t passwordInBytes = password.size() * 2;
-
-						writer.WriteUInt32(passwordInBytes);
-						writer.WriteBytes({ (uint8_t*)password.c_str(), passwordInBytes });
-					}
-
-					if (co_await writer.StoreAsync())
-					{
-						if (co_await stream.FlushAsync())
-						{
-							writer.Close();
-							stream.Close();
-						}
-					}
+					co_await FileSerializer::GetInstance().SaveFileAsync(pickedFile);
+					FileSerializer::GetInstance().ClearDirty();
 				}
 			}
 		}

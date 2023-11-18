@@ -75,6 +75,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(SolutionName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(SolutionName)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -87,15 +93,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)Native;$(SolutionDir)Cryptoengines\cryptoengine_abstracts;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cryptoengine_abstracts.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)Native;$(SolutionDir)Cryptoengines\cryptoengine_abstracts;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cryptoengine_abstracts.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -107,6 +121,7 @@
     </ClInclude>
     <ClInclude Include="FileMenuCommands.h" />
     <ClInclude Include="InternalCryptoTool.h" />
+    <ClInclude Include="Native\cryptoselector.h" />
     <ClInclude Include="Serialization\FileProtocol.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MainPage.xaml.h">
@@ -123,6 +138,8 @@
     </ClInclude>
     <ClInclude Include="SarcophagusCommands.h" />
     <ClInclude Include="SarcophagusCommon.h" />
+    <ClInclude Include="Serialization\FileProtocol_0_0_0_1.h" />
+    <ClInclude Include="Serialization\FileSerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
@@ -138,6 +155,7 @@
     </ClCompile>
     <ClCompile Include="FileMenuCommands.cpp" />
     <ClCompile Include="InternalCryptoTool.cpp" />
+    <ClCompile Include="Native\cryptoselector.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -155,6 +173,8 @@
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="SarcophagusCommon.cpp" />
+    <ClCompile Include="Serialization\FileProtocol_0_0_0_1.cpp" />
+    <ClCompile Include="Serialization\FileSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Sarcophagus.idl" />

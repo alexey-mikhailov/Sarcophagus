@@ -12,6 +12,9 @@ namespace Sarcophagus
 		EditCredential
 	};
 
+	enum PullDataResult { Success, DecryptionFailure };
+	enum PushDataResult { Success, EncryptionFailure };
+
 	[default_interface]
 	runtimeclass AddCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
@@ -34,6 +37,13 @@ namespace Sarcophagus
 	runtimeclass CopyCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		CopyCredentialCommand();
+	}
+
+	[default_interface]
+	runtimeclass NewFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		NewFileCommand();
+		Int64 WindowHandle{ get; set; };
 	}
 
 	[default_interface]
@@ -74,11 +84,37 @@ namespace Sarcophagus
 		RemoveCredentialCommand RemoveCredentialCommand{ get; };
 		EditCredentialCommand EditCredentialCommand{ get; };
 		CopyCredentialCommand CopyCredentialCommand{ get; };
+		NewFileCommand NewFileCommand{ get; };
 		OpenFileCommand OpenFileCommand{ get; };
 		SaveFileCommand SaveFileCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
 	}
+
+	runtimeclass FileSerializer : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		FileSerializer();
+		static FileSerializer GetInstance();
+
+		UInt64 GetStorageKeySize();
+		UInt64 GetStorageKeyBuff();
+		void SetStorageKey(UInt64 size, UInt64 buff);
+		void MakeDirty();
+		void ClearDirty();
+
+		void Initialize();
+		void OpenFile(Windows.Storage.StorageFile file);
+		void SaveFile(Windows.Storage.StorageFile file);
+		Windows.Foundation.IAsyncAction OpenFileAsync(Windows.Storage.StorageFile file);
+		Windows.Foundation.IAsyncAction SaveFileAsync(Windows.Storage.StorageFile file);
+
+		Windows.Foundation.IAsyncOperation<Boolean> AuthAsync(UInt64 keySize, UInt64 keyBuff);
+
+		Boolean IsDirty{ get; };
+		Microsoft.UI.Xaml.Visibility IsDirtyVisibility;
+	}
+
+
 
 	// 
 	// Views
@@ -89,6 +125,7 @@ namespace Sarcophagus
 	{
 		MainWindow();
 		MainVM MainVM{ get; };
+		FileSerializer FileSerializer{ get; };
 	}
 
 	[default_interface]

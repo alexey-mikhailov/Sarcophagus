@@ -1,7 +1,13 @@
 #include "pch.h"
 #include "MainVM.h"
+
+#if __has_include("Credential.g.cpp")
 #include "Credential.g.cpp"
+#endif
+#if __has_include("MainVM.g.cpp")
 #include "MainVM.g.cpp"
+#endif
+
 #include <SarcophagusCommon.h>
 
 namespace winrt::Sarcophagus::implementation

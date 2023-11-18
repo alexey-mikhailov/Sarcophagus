@@ -16,8 +16,10 @@ namespace winrt::Sarcophagus::implementation
 		void OnPageChanged(Sarcophagus::PageId pageId);
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
+		Sarcophagus::FileSerializer FileSerializer() const { return _fileSerializer; }
 
 	private:
+		Sarcophagus::FileSerializer _fileSerializer{FileSerializer::GetInstance()};
 		Sarcophagus::MainVM _vm{MainVM::GetInstance()};
 	};
 }

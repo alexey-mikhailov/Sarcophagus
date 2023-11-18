@@ -26,10 +26,13 @@ namespace winrt::Sarcophagus::implementation
 	void CredEditor::Init(Sarcophagus::MainVM const& vm)
 	{
 		_vm = vm;
+		_oldName = _vm.CredentialTemplate().Name();
 	}
 
 	void CredEditor::OnOk(IInspectable const&, RoutedEventArgs const&)
 	{
+		bool isDirty = false;
+
 		if (pwdBox1().Password() == pwdBox2().Password())
 		{
 			uint64_t pwdSize;
@@ -52,6 +55,12 @@ namespace winrt::Sarcophagus::implementation
 			};
 
 			winrt::Sarcophagus::Credential const& tmp = _vm.CredentialTemplate();
+
+			if (tmp.Password() != pwd)
+			{
+				isDirty = true;
+			}
+
 			tmp.Password(pwd);
 			_vm.PageId(Sarcophagus::PageId::Main);
 		}
@@ -64,6 +73,17 @@ namespace winrt::Sarcophagus::implementation
 			dialog.CloseButtonText(L"OK");
 			dialog.XamlRoot(XamlRoot());
 			dialog.ShowAsync();
+			return;
+		}
+
+		if (_oldName != _vm.CredentialTemplate().Name())
+		{
+			isDirty = true;
+		}
+
+		if (isDirty)
+		{
+			FileSerializer::GetInstance().MakeDirty();
 		}
 	}
 

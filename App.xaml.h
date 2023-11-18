@@ -11,11 +11,14 @@ namespace winrt::Sarcophagus::implementation
 {
 	struct App : AppT<App>
 	{
-		App();
+		static App& GetInstance() { return *_instance; }
 
+		App();
 		void OnLaunched(LaunchActivatedEventArgs const&);
+		winrt::Sarcophagus::MainWindow Window() const { return _window; }
 
 	private:
-		Window window{ nullptr };
+		static App* _instance;
+		winrt::Sarcophagus::MainWindow _window{ nullptr };
 	};
 }
