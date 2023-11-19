@@ -38,7 +38,9 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center"/>
+                                    <Canvas Height="27" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center" />
+                                    </Canvas>
                                     <Button Grid.Column="1" Content="Edit" Command="{x:Bind MainVM.EditCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
                                     <Button Grid.Column="2" Content="Copy" Command="{x:Bind MainVM.CopyCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
                                     <Button Grid.Column="3" Content="x" Command="{x:Bind MainVM.RemoveCredentialCommand}" CommandParameter="{x:Bind}"  Margin="1" />
