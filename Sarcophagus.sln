@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cryptoengines", "Cryptoengi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptoengine_abstracts", "Cryptoengines\cryptoengine_abstracts\cryptoengine_abstracts.vcxproj", "{A15FAEF2-C95B-42B8-A6ED-19FC4B910374}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aes_cryptor", "Cryptoengines\aes_cryptor\aes_cryptor.vcxproj", "{11971E47-A627-4BDF-8EFB-0C9A810BF01E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -56,6 +58,18 @@ Global
 		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374}.Release|x64.Build.0 = Release|x64
 		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374}.Release|x86.ActiveCfg = Release|Win32
 		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374}.Release|x86.Build.0 = Release|Win32
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|ARM64.ActiveCfg = Debug|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|ARM64.Build.0 = Debug|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|x64.ActiveCfg = Debug|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|x64.Build.0 = Debug|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|x86.ActiveCfg = Debug|Win32
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Debug|x86.Build.0 = Debug|Win32
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|ARM64.ActiveCfg = Release|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|ARM64.Build.0 = Release|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|x64.ActiveCfg = Release|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|x64.Build.0 = Release|x64
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|x86.ActiveCfg = Release|Win32
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +77,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AE3917D2-5092-407C-A28F-FF20775054E5} = {3CDF55B5-49DC-40C1-BAA5-0C541B1AF726}
 		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374} = {3CDF55B5-49DC-40C1-BAA5-0C541B1AF726}
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E} = {3CDF55B5-49DC-40C1-BAA5-0C541B1AF726}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CC752D5-8A69-42AA-9637-3E1482C69B3B}

@@ -20,8 +20,8 @@ namespace srfg
 	{
 		virtual ~enginema() override = default;
 		virtual void setup(uint64_t size, const uint8_t* init_data) override;
-		virtual void encrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst);
-		virtual void decrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst);
+		virtual void encrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst) override;
+		virtual void decrypt(uint64_t src_size, const uint8_t* src, uint64_t* dst_size, uint8_t** dst) override;
 		virtual guid_t get_uuid() const override;
 		virtual std::string get_name() const override;
 		virtual std::wstring get_wname() const override;

@@ -28,8 +28,11 @@ namespace winrt::Sarcophagus::implementation
 	void MainPage::OnCredFolderSelected(IInspectable const&, 
 	                                    SelectionChangedEventArgs const&)
 	{
-		// Complex binding path worked in WPF, now I have to force it via code behind.
-		// There still seems to be WinUI bug. 
-		listCredentials().ItemsSource(_vm.SelectedCredFolder().Credentials());
+		if (_vm.SelectedCredFolder())
+		{
+			// Complex binding path worked in WPF, now I have to force it via code behind.
+			// There still seems to be WinUI bug.
+			listCredentials().ItemsSource(_vm.SelectedCredFolder().Credentials());
+		}
 	}
 }
