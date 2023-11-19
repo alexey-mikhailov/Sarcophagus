@@ -54,7 +54,7 @@ namespace winrt::Sarcophagus::implementation
 			});
 			decision.Button2Handler([](ContentDialog, ContentDialogButtonClickEventArgs)
 			{
-				::Sarcophagus::ViewModelHub::GetInstance().MainVM().Credentials().Clear();
+				::Sarcophagus::ViewModelHub::GetInstance().MainVM().CredFolders().Clear();
 				FileSerializer::GetInstance().ClearDirty();
 			});
 
@@ -63,7 +63,7 @@ namespace winrt::Sarcophagus::implementation
 		else
 		{
 			Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
-			mainVM.Credentials().Clear();
+			mainVM.CredFolders().Clear();
 			FileSerializer::GetInstance().ClearDirty();
 			mainVM.ChooseCryptoengineToCreateFileCommand().Execute(nullptr);
 		}

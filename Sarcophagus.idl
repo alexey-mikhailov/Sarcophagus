@@ -76,6 +76,24 @@ namespace Sarcophagus
 	// 
 
 	[default_interface]
+	runtimeclass AddCredFolderCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		AddCredFolderCommand();
+	}
+	
+	[default_interface]
+	runtimeclass RemoveCredFolderCommand: Microsoft.UI.Xaml.Input.ICommand
+	{
+		RemoveCredFolderCommand();
+	}
+
+	[default_interface]
+	runtimeclass EditCredFolderCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		EditCredFolderCommand();
+	}
+
+	[default_interface]
 	runtimeclass AddCredentialCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		AddCredentialCommand();
@@ -144,12 +162,24 @@ namespace Sarcophagus
 	// View-Models
 	// 
 
+	runtimeclass CredFolder : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		CredFolder();
+		CredFolder(String name);
+
+		MainVM MainVM{ get; };
+		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
+
+		String Name;
+	}
+
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
-		Credential(String name, String password);
+		Credential(CredFolder credFolder, String name, String password);
 
 		MainVM MainVM{ get; };
+		CredFolder CredFolder{ get; };
 
 		String Name;
 		String Password;
@@ -158,18 +188,25 @@ namespace Sarcophagus
 	enum PageId
 	{
 		Main,
+		EditCredFolder,
 		EditCredential,
 		ChooseCryptoengine,
 	};
 
-	runtimeclass MainVM
+	runtimeclass MainVM : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		MainVM();
 
 		PageId PageId{ get; set; };
-		Credential CredentialTemplate{ get; set; };
-		Windows.Foundation.Collections.IObservableVector<Credential> Credentials{ get; };
 
+		CredFolder SelectedCredFolder{ get; set; };
+		Windows.Foundation.Collections.IObservableVector<CredFolder> CredFolders{ get; };
+
+		Credential CredentialTemplate{ get; set; };
+
+		AddCredFolderCommand AddCredFolderCommand{ get; };
+		RemoveCredFolderCommand RemoveCredFolderCommand{ get; };
+		EditCredFolderCommand EditCredFolderCommand{ get; };
 		AddCredentialCommand AddCredentialCommand{ get; };
 		RemoveCredentialCommand RemoveCredentialCommand{ get; };
 		EditCredentialCommand EditCredentialCommand{ get; };
@@ -234,6 +271,13 @@ namespace Sarcophagus
 		MainVM MainVM{ get; };
 	}
 
+    [default_interface]
+    runtimeclass CredFolderEditor : Microsoft.UI.Xaml.Controls.Page
+    {
+        CredFolderEditor();
+		MainVM MainVM{ get; };
+	}
+	
 	runtimeclass CredEditor : Microsoft.UI.Xaml.Controls.Page
 	{
 		CredEditor();

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "FileProtocol_0_0_0_1.h"
 
+#include <winrt/impl/Windows.Storage.Streams.2.h>
+
 #include "cryptoselector.h"
 #include "MainVM.h"
 #include "SarcophagusCommon.h"
@@ -60,13 +62,13 @@ namespace Sarcophagus
 				if (co_await winrt::Sarcophagus::FileSerializer::GetInstance().AuthAsync(keyInBytes, reinterpret_cast<uint64_t>(key)))
 				{
 					const winrt::Sarcophagus::MainVM vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
-					vm.Credentials().Clear();
 
-					uint32_t credentialCount = *reinterpret_cast<uint32_t*>(dstPtr);
-					credentialCount = _byteswap_ulong(credentialCount);
+					vm.CredFolders().Clear();
+					uint32_t credFolderCount = *reinterpret_cast<uint32_t*>(dstPtr);
+					credFolderCount = _byteswap_ulong(credFolderCount);
 					dstPtr += sizeof(uint32_t);
 
-					for (uint32_t i = 0; i < credentialCount; ++i)
+					for (uint32_t i = 0; i < credFolderCount; ++i)
 					{
 						uint32_t nameInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
 						nameInBytes = _byteswap_ulong(nameInBytes);
@@ -78,23 +80,47 @@ namespace Sarcophagus
 						memcpy(name, dstPtr, nameInBytes);
 						dstPtr += nameInBytes;
 
-						winrt::hstring credentialName(name, nameInBytes / 2);
+						winrt::hstring credFolderName(name, nameInBytes / 2);
 						delete[] name;
 
-						uint32_t passwordInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
-						passwordInBytes = _byteswap_ulong(passwordInBytes);
+						winrt::Sarcophagus::CredFolder credFolder(credFolderName);
+
+						uint32_t credentialCount = *reinterpret_cast<uint32_t*>(dstPtr);
+						credentialCount = _byteswap_ulong(credentialCount);
 						dstPtr += sizeof(uint32_t);
 
-						SARCOPHAGUS_ASSERT(passwordInBytes % 2 == 0, NULL, L"Number of bytes of cred.value should be even number. ");
+						for (uint32_t j = 0; j < credentialCount; ++j)
+						{
+							nameInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
+							nameInBytes = _byteswap_ulong(nameInBytes);
+							dstPtr += sizeof(uint32_t);
 
-						wchar_t* password = new wchar_t[passwordInBytes / 2];
-						memcpy(password, dstPtr, passwordInBytes);
-						dstPtr += passwordInBytes;
+							SARCOPHAGUS_ASSERT(nameInBytes % 2 == 0, NULL, L"Number of bytes of cred.key should be even number. ");
 
-						winrt::hstring credentialPassword(password, passwordInBytes / 2);
-						delete[] password;
+							name = new wchar_t[nameInBytes / 2];
+							memcpy(name, dstPtr, nameInBytes);
+							dstPtr += nameInBytes;
 
-						vm.Credentials().Append(winrt::Sarcophagus::Credential(credentialName, credentialPassword));
+							winrt::hstring credentialName(name, nameInBytes / 2);
+							delete[] name;
+
+							uint32_t passwordInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
+							passwordInBytes = _byteswap_ulong(passwordInBytes);
+							dstPtr += sizeof(uint32_t);
+
+							SARCOPHAGUS_ASSERT(passwordInBytes % 2 == 0, NULL, L"Number of bytes of cred.value should be even number. ");
+
+							wchar_t* password = new wchar_t[passwordInBytes / 2];
+							memcpy(password, dstPtr, passwordInBytes);
+							dstPtr += passwordInBytes;
+
+							winrt::hstring credentialPassword(password, passwordInBytes / 2);
+							delete[] password;
+
+							credFolder.Credentials().Append(winrt::Sarcophagus::Credential(nullptr, credentialName, credentialPassword));
+						}
+
+						vm.CredFolders().Append(credFolder);
 					}
 
 					delete[] dstData;
@@ -129,22 +155,35 @@ namespace Sarcophagus
 			engine->setup(keySize, keyBuff);
 
 			const winrt::Sarcophagus::MainVM vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
-			const uint32_t credentialCount = vm.Credentials().Size();
-			rawWriter.WriteUInt32(credentialCount);
 
-			for (auto credential : vm.Credentials())
+			const uint32_t credFolderCount = vm.CredFolders().Size();
+			rawWriter.WriteUInt32(credFolderCount);
+
+			for (auto credFolder : vm.CredFolders())
 			{
-				const winrt::hstring name = credential.Name();
-				const uint32_t nameInBytes = name.size() * 2;
+				const winrt::hstring folderName = credFolder.Name();
+				const uint32_t folderNameBytes = folderName.size() * 2;
 
-				rawWriter.WriteUInt32(nameInBytes);
-				rawWriter.WriteBytes({ (uint8_t*)name.c_str(), nameInBytes });
+				rawWriter.WriteUInt32(folderNameBytes);
+				rawWriter.WriteBytes({ (uint8_t*)folderName.c_str(), folderNameBytes });
 
-				const winrt::hstring password = credential.Password();
-				const uint32_t passwordInBytes = password.size() * 2;
+				const uint32_t credentialCount = credFolder.Credentials().Size();
+				rawWriter.WriteUInt32(credentialCount);
 
-				rawWriter.WriteUInt32(passwordInBytes);
-				rawWriter.WriteBytes({ (uint8_t*)password.c_str(), passwordInBytes });
+				for (auto credential : credFolder.Credentials())
+				{
+					const winrt::hstring name = credential.Name();
+					const uint32_t nameInBytes = name.size() * 2;
+
+					rawWriter.WriteUInt32(nameInBytes);
+					rawWriter.WriteBytes({ (uint8_t*)name.c_str(), nameInBytes });
+
+					const winrt::hstring password = credential.Password();
+					const uint32_t passwordInBytes = password.size() * 2;
+
+					rawWriter.WriteUInt32(passwordInBytes);
+					rawWriter.WriteBytes({ (uint8_t*)password.c_str(), passwordInBytes });
+				}
 			}
 
 			const winrt::Windows::Storage::Streams::IBuffer srcBuffer = rawWriter.DetachBuffer();

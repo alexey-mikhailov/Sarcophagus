@@ -11,18 +11,66 @@
     mc:Ignorable="d"
     Name="MainPage1">
     <Grid Padding="0,-30,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="200" />
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="Add" 
-                Command="{x:Bind MainVM.AddCredentialCommand}" 
+        <Button Content="Add Folder" 
+                Command="{x:Bind MainVM.AddCredFolderCommand}" 
                 HorizontalAlignment="Right" 
-                Margin="0,0,10,0" />
-        <Border Padding="5" Grid.Row="1">
+                Margin="0,0,10,0"
+                Grid.Column="0" 
+                Grid.Row="0" />
+        <Border Padding="5" 
+                Grid.Column="0" 
+                Grid.Row="1" >
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" 
                           VerticalScrollBarVisibility="Visible">
-                <ItemsControl x:Name="itemsControlAccs" ItemsSource="{x:Bind MainVM.Credentials}">
+                    <ListView ItemsSource="{x:Bind MainVM.CredFolders}"
+                              SelectedItem="{x:Bind MainVM.SelectedCredFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectionChanged="OnCredFolderSelected">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Background="#1f000000"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:CredFolder">
+                                <Border Padding="3">
+                                    <Grid Background="#1f000000" Padding="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3,3,12,3" VerticalAlignment="Center" />
+                                        <Button Grid.Column="1" Content="Edit" Command="{x:Bind MainVM.EditCredFolderCommand}" CommandParameter="{x:Bind}"  Margin="1" />
+                                        <Button Grid.Column="3" Content="x" Command="{x:Bind MainVM.RemoveCredFolderCommand}" CommandParameter="{x:Bind}"  Margin="1" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+        </Border>
+        <Button Content="Add Credential" 
+                Command="{x:Bind MainVM.AddCredentialCommand}" 
+                HorizontalAlignment="Right" 
+                Margin="0,0,10,0"
+                Grid.Column="2" 
+                Grid.Row="0" />
+        <Border Padding="5" 
+                Grid.Column="2" 
+                Grid.Row="1" >
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" 
+                          VerticalScrollBarVisibility="Visible">
+                <ItemsControl x:Name="listCredentials" 
+                              ItemsSource="{x:Bind MainVM.SelectedCredFolder.Credentials}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Background="#1f000000"/>

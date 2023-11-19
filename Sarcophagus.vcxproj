@@ -124,6 +124,10 @@
     <ClInclude Include="CredEditor.xaml.h">
       <DependentUpon>CredEditor.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="CredFolderEditor.xaml.h">
+      <DependentUpon>CredFolderEditor.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="DialogTools.h" />
     <ClInclude Include="FileMenuCommands.h" />
     <ClInclude Include="InternalCryptoTool.h" />
@@ -154,6 +158,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CredEditor.xaml" />
+    <Page Include="CredFolderEditor.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -167,6 +174,10 @@
     <ClCompile Include="ChooseCryptoengineVM.cpp" />
     <ClCompile Include="CredEditor.xaml.cpp">
       <DependentUpon>CredEditor.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="CredFolderEditor.xaml.cpp">
+      <DependentUpon>CredFolderEditor.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="DialogTools.cpp" />
     <ClCompile Include="FileMenuCommands.cpp" />

@@ -4,6 +4,9 @@
 #include "SarcophagusCommon.h"
 #include "ViewModelHub.h"
 
+#if __has_include("CredFolder.g.cpp")
+#include "CredFolder.g.cpp"
+#endif
 #if __has_include("Credential.g.cpp")
 #include "Credential.g.cpp"
 #endif
@@ -11,8 +14,44 @@
 #include "MainVM.g.cpp"
 #endif
 
+using namespace winrt::Microsoft::UI::Xaml::Data;
+
 namespace winrt::Sarcophagus::implementation
 {
+	CredFolder::CredFolder()
+	{
+		_credentials = winrt::single_threaded_observable_vector<Sarcophagus::Credential>();
+	}
+
+	CredFolder::CredFolder(winrt::hstring name): _name(name)
+	{
+		_credentials = winrt::single_threaded_observable_vector<Sarcophagus::Credential>();
+	}
+
+	winrt::Sarcophagus::MainVM CredFolder::MainVM() const
+	{
+		return ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+	}
+
+	void CredFolder::Name(const winrt::hstring& name)
+	{
+		if (name != _name)
+		{
+			_name = name;
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(Name)));
+		}
+	}
+
+	winrt::event_token CredFolder::PropertyChanged(PropertyChangedEventHandler const& value)
+	{
+		return _propertyChanged.add(value);
+	}
+
+	void CredFolder::PropertyChanged(const winrt::event_token& token)
+	{
+		_propertyChanged.remove(token);
+	}
+
 	winrt::Sarcophagus::MainVM Credential::MainVM() const
 	{
 		return ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
@@ -23,7 +62,7 @@ namespace winrt::Sarcophagus::implementation
 		if (name != _name)
 		{
 			_name = name;
-			_propertyChanged(*this, Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Name)));
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(Name)));
 		}
 	}
 
@@ -32,11 +71,11 @@ namespace winrt::Sarcophagus::implementation
 		if (password != _password)
 		{
 			_password = password;
-			_propertyChanged(*this, Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(wnameof(Password)));
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(Password)));
 		}
 	}
 
-	winrt::event_token Credential::PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& value)
+	winrt::event_token Credential::PropertyChanged(PropertyChangedEventHandler const& value)
 	{
 		return _propertyChanged.add(value);
 	}
@@ -48,7 +87,7 @@ namespace winrt::Sarcophagus::implementation
 
 	MainVM::MainVM()
 	{
-		_credentials = winrt::single_threaded_observable_vector<Sarcophagus::Credential>();
+		_credFolders = winrt::single_threaded_observable_vector<Sarcophagus::CredFolder>();
 	}
 
 	void MainVM::PageId(winrt::Sarcophagus::PageId pageId)
@@ -59,5 +98,33 @@ namespace winrt::Sarcophagus::implementation
 		}
 
 		_pageId = pageId;
+	}
+
+	void MainVM::SelectedCredFolder(Sarcophagus::CredFolder const& value)
+	{
+		if (value != _selectedCredFolder)
+		{
+			_selectedCredFolder = value;
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(SelectedCredFolder)));
+		}
+	}
+
+	void MainVM::CredentialTemplate(Sarcophagus::Credential const& value)
+	{
+		if (value != _credentialTemplate)
+		{
+			_credentialTemplate = value;
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(CredentialTemplate)));
+		}
+	}
+
+	winrt::event_token MainVM::PropertyChanged(PropertyChangedEventHandler const& value)
+	{
+		return _propertyChanged.add(value);
+	}
+
+	void MainVM::PropertyChanged(const winrt::event_token& token)
+	{
+		_propertyChanged.remove(token);
 	}
 }

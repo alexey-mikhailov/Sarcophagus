@@ -19,6 +19,8 @@ namespace winrt::Sarcophagus::implementation
 
 	private:
 		Sarcophagus::MainVM _vm { nullptr };
+	public:
+		void OnCredFolderSelected(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Controls::SelectionChangedEventArgs const& e);
 	};
 }
 

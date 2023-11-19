@@ -5,6 +5,7 @@
 #include "MainWindow.xaml.h"
 
 #include "ChooseCryptoenginePage.xaml.h"
+#include "CredFolderEditor.xaml.h"
 #include "CredEditor.xaml.h"
 #include "MainPage.xaml.h"
 #include "resource.h"
@@ -93,6 +94,20 @@ namespace winrt::Sarcophagus::implementation
 			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>()))
 			{
 				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
+				{
+					page->Init();
+				}
+			}
+		}
+		else if (pageId == PageId::EditCredFolder)
+		{
+			// Change breadcrumb bar content. 
+			BreadcrumbBar().ItemsSource(winrt::single_threaded_observable_vector<hstring>({ L"Main", L"Edit folder"}));
+
+			// Navigate to new frame
+			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::CredFolderEditor>()))
+			{
+				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::CredFolderEditor>())
 				{
 					page->Init();
 				}

@@ -16,6 +16,9 @@
     <Page Include="CredEditor.xaml">
       <Filter>View</Filter>
     </Page>
+    <Page Include="CredFolderEditor.xaml">
+      <Filter>View</Filter>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Sarcophagus.idl" />

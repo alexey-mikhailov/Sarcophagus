@@ -1,4 +1,5 @@
 #pragma once
+#include "CredFolder.g.h"
 #include "Credential.g.h"
 #include "MainVM.g.h"
 
@@ -6,12 +7,37 @@ using namespace winrt::Windows::Foundation::Collections;
 
 namespace winrt::Sarcophagus::implementation
 {
+	struct CredFolder : CredFolderT<CredFolder>
+	{
+		CredFolder();
+		CredFolder(winrt::hstring name);
+
+		winrt::Sarcophagus::MainVM MainVM() const;
+		IObservableVector<Sarcophagus::Credential> Credentials() const { return _credentials; }
+
+		winrt::hstring Name() const { return _name; }
+		void Name(const winrt::hstring& name);
+
+		winrt::event_token PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& value);
+		void PropertyChanged(const winrt::event_token& token);
+
+	private:
+		IObservableVector<Sarcophagus::Credential> _credentials;
+		winrt::hstring _name;
+		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
+	};
+
 	struct Credential : CredentialT<Credential>
 	{
 		Credential() = default;
-		Credential(winrt::hstring name, winrt::hstring password) : _name(name), _password(password) {}
+		Credential(winrt::Sarcophagus::CredFolder credFolder, 
+		           winrt::hstring name, 
+		           winrt::hstring password) : _credFolder(credFolder),
+		                                      _name(name),
+		                                      _password(password) {}
 
 		winrt::Sarcophagus::MainVM MainVM() const;
+		winrt::Sarcophagus::CredFolder CredFolder() { return _credFolder; }
 
 		winrt::hstring Name() const { return _name; }
 		void Name(const winrt::hstring& name);
@@ -23,6 +49,7 @@ namespace winrt::Sarcophagus::implementation
 		void PropertyChanged(const winrt::event_token& token);
 
 	private:
+		winrt::Sarcophagus::CredFolder _credFolder;
 		winrt::hstring _name;
 		winrt::hstring _password;
 		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
@@ -35,13 +62,22 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::PageId PageId() { return _pageId; }
 		void PageId(winrt::Sarcophagus::PageId pageId);
 
+		Sarcophagus::CredFolder SelectedCredFolder() const { return _selectedCredFolder; }
+		void SelectedCredFolder(Sarcophagus::CredFolder const& value);
+		IObservableVector<Sarcophagus::CredFolder> CredFolders() const { return _credFolders; }
+
 		Sarcophagus::Credential CredentialTemplate() const { return _credentialTemplate; }
-		void CredentialTemplate(Sarcophagus::Credential const& value) { _credentialTemplate = value; }
-		IObservableVector<Sarcophagus::Credential> Credentials() const { return _credentials; }
+		void CredentialTemplate(Sarcophagus::Credential const& value);
+
+		winrt::event_token PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& value);
+		void PropertyChanged(const winrt::event_token& token);
 
 		winrt::event_token PageChanged(PageChangedDelegate const& value) { return _pageChanged.add(value); }
 		void PageChanged(winrt::event_token const& token) noexcept { _pageChanged.remove(token); }
 
+		Sarcophagus::AddCredFolderCommand AddCredFolderCommand() const { return _addCredFolderCommand; }
+		Sarcophagus::RemoveCredFolderCommand RemoveCredFolderCommand() const { return _removeCredFolderCommand; }
+		Sarcophagus::EditCredFolderCommand EditCredFolderCommand() const { return _editCredFolderCommand; }
 		Sarcophagus::AddCredentialCommand AddCredentialCommand() const { return _addCredentialCommand; }
 		Sarcophagus::RemoveCredentialCommand RemoveCredentialCommand() const { return _removeCredentialCommand; }
 		Sarcophagus::EditCredentialCommand EditCredentialCommand() const { return _editCredentialCommand; }
@@ -54,9 +90,13 @@ namespace winrt::Sarcophagus::implementation
 
 	private:
 		Sarcophagus::PageId _pageId = Sarcophagus::PageId::ChooseCryptoengine;
+		Sarcophagus::CredFolder _selectedCredFolder = nullptr;
+		IObservableVector<Sarcophagus::CredFolder> _credFolders;
 		Sarcophagus::Credential _credentialTemplate = nullptr;
-		IObservableVector<Sarcophagus::Credential> _credentials;
 
+		Sarcophagus::AddCredFolderCommand _addCredFolderCommand;
+		Sarcophagus::RemoveCredFolderCommand _removeCredFolderCommand;
+		Sarcophagus::EditCredFolderCommand _editCredFolderCommand;
 		Sarcophagus::AddCredentialCommand _addCredentialCommand;
 		Sarcophagus::RemoveCredentialCommand _removeCredentialCommand;
 		Sarcophagus::EditCredentialCommand _editCredentialCommand;
@@ -67,12 +107,14 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::ChooseCryptoengineToSaveFileCommand _chooseCryptoengineToSaveFileCommand;
 		Sarcophagus::SaveFileCommand _saveFileCommand;
 
+		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
 		winrt::event<PageChangedDelegate> _pageChanged;
 	};
 }
 
 namespace winrt::Sarcophagus::factory_implementation
 {
-	struct Credential : CredentialT<Credential, implementation::Credential>	{};
+	struct CredFolder : CredFolderT<CredFolder, implementation::CredFolder> {};
+	struct Credential : CredentialT<Credential, implementation::Credential> {};
 	struct MainVM :     MainVMT<MainVM, implementation::MainVM> {};
 }

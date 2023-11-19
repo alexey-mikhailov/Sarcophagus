@@ -3,18 +3,28 @@
 
 #include "cryptoengine_abstracts.h"
 #include "cryptoselector.h"
+#include "DialogTools.h"
 #include "InternalCryptoTool.h"
 #include "SarcophagusCommon.h"
 #include "ViewModelHub.h"
 
-#if __has_include("EditCredentialCommand.g.cpp")
-#include "EditCredentialCommand.g.cpp"
+#if __has_include("AddCredFolderCommand.g.cpp")
+#include "AddCredFolderCommand.g.cpp"
+#endif
+#if __has_include("RemoveCredFolderCommand.g.cpp")
+#include "RemoveCredFolderCommand.g.cpp"
+#endif
+#if __has_include("EditCredFolderCommand.g.cpp")
+#include "EditCredFolderCommand.g.cpp"
 #endif
 #if __has_include("AddCredentialCommand.g.cpp")
 #include "AddCredentialCommand.g.cpp"
 #endif
 #if __has_include("RemoveCredentialCommand.g.cpp")
 #include "RemoveCredentialCommand.g.cpp"
+#endif
+#if __has_include("EditCredentialCommand.g.cpp")
+#include "EditCredentialCommand.g.cpp"
 #endif
 #if __has_include("CopyCredentialCommand.g.cpp")
 #include "CopyCredentialCommand.g.cpp"
@@ -25,11 +35,53 @@
 
 namespace winrt::Sarcophagus::implementation
 {
+	void AddCredFolderCommand::Execute(IInspectable const&)
+	{
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+		mainVM.CredFolders().Append(Sarcophagus::CredFolder(L"New folder"));
+		FileSerializer::GetInstance().MakeDirty();
+	}
+
+	void RemoveCredFolderCommand::Execute(IInspectable const& parameter)
+	{
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+
+		if (auto credFolder = parameter.try_as<Sarcophagus::CredFolder>())
+		{
+			uint32_t index;
+			if (mainVM.CredFolders().IndexOf(credFolder, index))
+			{
+				mainVM.CredFolders().RemoveAt(index);
+			}
+		}
+
+		FileSerializer::GetInstance().MakeDirty();
+	}
+
+	void EditCredFolderCommand::Execute(IInspectable const& parameter)
+	{
+		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+
+		if (auto credFolder = parameter.try_as<Sarcophagus::CredFolder>())
+		{
+			mainVM.SelectedCredFolder(credFolder);
+			mainVM.PageId(Sarcophagus::PageId::EditCredFolder);
+		}
+	}
+
 	void AddCredentialCommand::Execute(IInspectable const&)
 	{
 		Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
-		mainVM.Credentials().Append(Sarcophagus::Credential(L"New credential", L""));
-		FileSerializer::GetInstance().MakeDirty();
+
+		if (mainVM.SelectedCredFolder())
+		{
+			mainVM.SelectedCredFolder().Credentials().Append(Sarcophagus::Credential(nullptr, L"New credential", L""));
+			FileSerializer::GetInstance().MakeDirty();
+		}
+		else
+		{
+			::Sarcophagus::ShowErrorAsync(L"Select folder first. ");
+		}
 	}
 
 	void RemoveCredentialCommand::Execute(IInspectable const& parameter)
@@ -39,9 +91,9 @@ namespace winrt::Sarcophagus::implementation
 		if (auto credential = parameter.try_as<Sarcophagus::Credential>())
 		{
 			uint32_t index;
-			if (mainVM.Credentials().IndexOf(credential, index))
+			if (mainVM.SelectedCredFolder().Credentials().IndexOf(credential, index))
 			{
-				mainVM.Credentials().RemoveAt(index);
+				mainVM.SelectedCredFolder().Credentials().RemoveAt(index);
 			}
 		}
 

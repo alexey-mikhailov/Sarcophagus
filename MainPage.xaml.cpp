@@ -10,9 +10,8 @@
 
 using namespace winrt;
 using namespace winrt::Microsoft::UI::Xaml;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using namespace winrt::Microsoft::UI::Xaml::Controls;
+using namespace winrt::Windows::Foundation;
 
 namespace winrt::Sarcophagus::implementation
 {
@@ -24,5 +23,13 @@ namespace winrt::Sarcophagus::implementation
 	void MainPage::Init()
 	{
 		_vm = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+	}
+
+	void MainPage::OnCredFolderSelected(IInspectable const&, 
+	                                    SelectionChangedEventArgs const&)
+	{
+		// Complex binding path worked in WPF, now I have to force it via code behind.
+		// There still seems to be WinUI bug. 
+		listCredentials().ItemsSource(_vm.SelectedCredFolder().Credentials());
 	}
 }
