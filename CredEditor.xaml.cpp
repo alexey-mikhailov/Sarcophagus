@@ -87,4 +87,27 @@ namespace winrt::Sarcophagus::implementation
 	{
 		_vm.PageId(Sarcophagus::PageId::Main);
 	}
+
+	void CredEditor::OnGeneratePassword(Windows::Foundation::IInspectable const&, RoutedEventArgs const&)
+	{
+		winrt::hstring pwd = GeneratePassword();
+
+		pwdBox1().Password(pwd);
+		pwdBox2().Password(pwd);
+	}
+
+	winrt::hstring CredEditor::GeneratePassword() const
+	{
+		winrt::hstring password;
+		
+		for (int i = 0; i < 16; ++i)
+		{
+			char character = rand() % 94 + 33;
+			password = password + character;
+		}
+
+		return password;
+	}
 }
+
+

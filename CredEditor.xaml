@@ -28,7 +28,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Password" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <PasswordBox x:Name="pwdBox1" PlaceholderText="Enter new password here" Grid.Column="1" />
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <PasswordBox x:Name="pwdBox1" PlaceholderText="Enter new password here" Grid.Column="0" />
+                    <Button Click="OnGeneratePassword" Content="Generate" Width="100" Grid.Column="2"/>
+                </Grid>
             </Grid>
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
@@ -36,9 +44,17 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Password" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <PasswordBox x:Name="pwdBox2" PlaceholderText="Enter new password here once again" Grid.Column="1" />
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <PasswordBox x:Name="pwdBox2" PlaceholderText="Enter new password here once again" Grid.Column="0" />
+                    <Button Click="OnGeneratePassword" Content="Generate" Width="100" Grid.Column="2"/>
+                </Grid>
             </Grid>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
                 <Button x:Name="ButtonOk" Click="OnOk" Content="OK"  />
                 <Border Width="2"/>
                 <Button x:Name="ButtonCancel" Click="OnCancel" Content="Cancel" />

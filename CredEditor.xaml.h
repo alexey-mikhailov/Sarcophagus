@@ -12,10 +12,12 @@ namespace winrt::Sarcophagus::implementation
 		void Init();
 		void OnOk(IInspectable const& sender, RoutedEventArgs const& e);
 		void OnCancel(IInspectable const& sender, RoutedEventArgs const& e);
+		void OnGeneratePassword(winrt::Windows::Foundation::IInspectable const& sender, RoutedEventArgs const& e);
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 
 	private:
+		winrt::hstring GeneratePassword() const;
 		Sarcophagus::MainVM _vm{nullptr};
 		winrt::hstring _oldName;
 	};
