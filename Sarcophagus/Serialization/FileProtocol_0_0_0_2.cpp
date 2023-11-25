@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "FileProtocol_0_0_0_1.h"
+#include "FileProtocol_0_0_0_2.h"
 
 #include <winrt/impl/Windows.Storage.Streams.2.h>
 
 #include "cryptoselector.h"
-#include "MainVM.h"
+#include "DialogTools.h"
 #include "SarcophagusCommon.h"
 #include "ViewModelHub.h"
 
 namespace Sarcophagus
 {
-	uint64_t FileProtocol_0_0_0_1::GetVersion()
+	uint64_t FileProtocol_0_0_0_2::GetVersion()
 	{
-		return 0x00'00'00'01ui32;
+		return 0x00'00'00'02ui32;
 	}
 
-	IAsyncOperation<winrt::Sarcophagus::PullDataResult> FileProtocol_0_0_0_1::PullData(const winrt::Windows::Storage::Streams::DataReader& reader)
+	IAsyncOperation<winrt::Sarcophagus::PullDataResult> FileProtocol_0_0_0_2::PullData(const winrt::Windows::Storage::Streams::DataReader& reader)
 	{
 		srfg::guid_t uuid;
 		uuid.raw64[0] = reader.ReadUInt64();
@@ -91,6 +91,7 @@ namespace Sarcophagus
 
 						for (uint32_t j = 0; j < credentialCount; ++j)
 						{
+							// Name
 							nameInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
 							nameInBytes = _byteswap_ulong(nameInBytes);
 							dstPtr += sizeof(uint32_t);
@@ -104,6 +105,21 @@ namespace Sarcophagus
 							winrt::hstring credentialName(name, nameInBytes / 2);
 							delete[] name;
 
+							// Login
+							uint32_t loginInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
+							loginInBytes = _byteswap_ulong(loginInBytes);
+							dstPtr += sizeof(uint32_t);
+
+							SARCOPHAGUS_ASSERT(loginInBytes % 2 == 0, NULL, L"Number of bytes of cred.value should be even number. ");
+
+							wchar_t* login = new wchar_t[loginInBytes / 2];
+							memcpy(login, dstPtr, loginInBytes);
+							dstPtr += loginInBytes;
+
+							winrt::hstring credentialLogin(login, loginInBytes / 2);
+							delete[] login;
+
+							// Password
 							uint32_t passwordInBytes = *reinterpret_cast<uint32_t*>(dstPtr);
 							passwordInBytes = _byteswap_ulong(passwordInBytes);
 							dstPtr += sizeof(uint32_t);
@@ -117,7 +133,7 @@ namespace Sarcophagus
 							winrt::hstring credentialPassword(password, passwordInBytes / 2);
 							delete[] password;
 
-							credFolder.Credentials().Append(winrt::Sarcophagus::Credential(nullptr, credentialName, Sarcophagus::EmptyString, credentialPassword));
+							credFolder.Credentials().Append(winrt::Sarcophagus::Credential(nullptr, credentialName, credentialLogin, credentialPassword));
 						}
 
 						vm.CredFolders().Append(credFolder);
@@ -129,11 +145,15 @@ namespace Sarcophagus
 				delete[] key;
 			}
 		}
+		else
+		{
+			co_await ::Sarcophagus::ShowErrorAsync(L"Switch engine failed while pulling data. ");
+		}
 
 		co_return winrt::Sarcophagus::PullDataResult::Success;
 	}
 
-	IAsyncOperation<winrt::Sarcophagus::PushDataResult> FileProtocol_0_0_0_1::PushData(const winrt::Windows::Storage::Streams::DataWriter& writer)
+	IAsyncOperation<winrt::Sarcophagus::PushDataResult> FileProtocol_0_0_0_2::PushData(const winrt::Windows::Storage::Streams::DataWriter& writer)
 	{
 		if (const auto engine = srfg::cryptoselector::get_instance().get_engine())
 		{
@@ -178,6 +198,12 @@ namespace Sarcophagus
 					rawWriter.WriteUInt32(nameInBytes);
 					rawWriter.WriteBytes({ (uint8_t*)name.c_str(), nameInBytes });
 
+					const winrt::hstring login = credential.Login();
+					const uint32_t loginInBytes = login.size() * 2;
+
+					rawWriter.WriteUInt32(loginInBytes);
+					rawWriter.WriteBytes({ (uint8_t*)login.c_str(), loginInBytes });
+
 					const winrt::hstring password = credential.Password();
 					const uint32_t passwordInBytes = password.size() * 2;
 
@@ -194,6 +220,10 @@ namespace Sarcophagus
 
 			writer.WriteBytes(winrt::array_view<const uint8_t>(dstData, static_cast<uint32_t>(dstSize)));
 			delete[] dstData;
+		}
+		else
+		{
+			co_await ::Sarcophagus::ShowErrorAsync(L"Cryptoengine wasn't set. ");
 		}
 
 		co_return winrt::Sarcophagus::PushDataResult::Success;

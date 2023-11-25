@@ -71,7 +71,7 @@ void App::OnLaunched(LaunchActivatedEventArgs const&)
 
 		if (appWindow)
 		{
-			appWindow.Resize({ 600, 300 });
+			appWindow.Resize({ 600, 325 });
 		}
 	}
 

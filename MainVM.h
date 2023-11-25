@@ -32,8 +32,10 @@ namespace winrt::Sarcophagus::implementation
 		Credential() = default;
 		Credential(winrt::Sarcophagus::CredFolder credFolder, 
 		           winrt::hstring name, 
+		           winrt::hstring login, 
 		           winrt::hstring password) : _credFolder(credFolder),
 		                                      _name(name),
+		                                      _login(login),
 		                                      _password(password) {}
 
 		winrt::Sarcophagus::MainVM MainVM() const;
@@ -41,6 +43,9 @@ namespace winrt::Sarcophagus::implementation
 
 		winrt::hstring Name() const { return _name; }
 		void Name(const winrt::hstring& name);
+
+		winrt::hstring Login() const { return _login; }
+		void Login(const winrt::hstring& login);
 
 		winrt::hstring Password() const { return _password; }
 		void Password(const winrt::hstring& password);
@@ -51,6 +56,7 @@ namespace winrt::Sarcophagus::implementation
 	private:
 		winrt::Sarcophagus::CredFolder _credFolder;
 		winrt::hstring _name;
+		winrt::hstring _login;
 		winrt::hstring _password;
 		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
 	};

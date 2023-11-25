@@ -66,6 +66,15 @@ namespace winrt::Sarcophagus::implementation
 		}
 	}
 
+	void Credential::Login(const winrt::hstring& login)
+	{
+		if (login != _login)
+		{
+			_login = login;
+			_propertyChanged(*this, PropertyChangedEventArgs(wnameof(Login)));
+		}
+	}
+
 	void Credential::Password(const winrt::hstring& password)
 	{
 		if (password != _password)

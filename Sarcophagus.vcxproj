@@ -149,6 +149,7 @@
     <ClInclude Include="SarcophagusCommands.h" />
     <ClInclude Include="SarcophagusCommon.h" />
     <ClInclude Include="Serialization\FileProtocol_0_0_0_1.h" />
+    <ClInclude Include="Serialization\FileProtocol_0_0_0_2.h" />
     <ClInclude Include="Serialization\FileSerializer.h" />
     <ClInclude Include="ViewModelHub.h" />
   </ItemGroup>
@@ -201,6 +202,7 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="SarcophagusCommon.cpp" />
     <ClCompile Include="Serialization\FileProtocol_0_0_0_1.cpp" />
+    <ClCompile Include="Serialization\FileProtocol_0_0_0_2.cpp" />
     <ClCompile Include="Serialization\FileSerializer.cpp" />
     <ClCompile Include="ViewModelHub.cpp" />
   </ItemGroup>

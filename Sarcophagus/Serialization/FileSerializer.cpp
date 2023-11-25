@@ -4,7 +4,7 @@
 #include "App.xaml.h"
 #include "DialogTools.h"
 #include "FileProtocol_0_0_0_1.h"
-#include "InternalCryptoTool.h"
+#include "FileProtocol_0_0_0_2.h"
 #include "SarcophagusCommon.h"
 
 #if __has_include("FileSerializer.g.cpp")
@@ -14,7 +14,7 @@
 namespace winrt::Sarcophagus::implementation
 {
 	FileSerializer::FileSerializer()
-		: _currentVersion(0x00'00'00'01ui32)
+		: _currentVersion(0x00'00'00'02ui32)
 	{
 		// Change current version in member initializer. 
 	}
@@ -60,6 +60,7 @@ namespace winrt::Sarcophagus::implementation
 	{
 		// Add new file versions here. 
 		_protocols.emplace(0x00'00'00'01ui32, std::make_shared<::Sarcophagus::FileProtocol_0_0_0_1>());
+		_protocols.emplace(0x00'00'00'02ui32, std::make_shared<::Sarcophagus::FileProtocol_0_0_0_2>());
 	}
 
 	void FileSerializer::OpenFile(const StorageFile& file)

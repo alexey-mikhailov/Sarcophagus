@@ -176,12 +176,13 @@ namespace Sarcophagus
 	runtimeclass Credential : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
 	{
 		Credential();
-		Credential(CredFolder credFolder, String name, String password);
+		Credential(CredFolder credFolder, String name, String login, String password);
 
 		MainVM MainVM{ get; };
 		CredFolder CredFolder{ get; };
 
 		String Name;
+		String Login;
 		String Password;
 	}
 

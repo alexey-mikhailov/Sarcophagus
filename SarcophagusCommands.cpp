@@ -75,7 +75,7 @@ namespace winrt::Sarcophagus::implementation
 
 		if (mainVM.SelectedCredFolder())
 		{
-			mainVM.SelectedCredFolder().Credentials().Append(Sarcophagus::Credential(nullptr, L"New credential", L""));
+			mainVM.SelectedCredFolder().Credentials().Append(Sarcophagus::Credential(nullptr, L"New credential", ::Sarcophagus::EmptyString, ::Sarcophagus::EmptyString));
 			FileSerializer::GetInstance().MakeDirty();
 		}
 		else
