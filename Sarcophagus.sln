@@ -3,14 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sarcophagus", "Sarcophagus\Sarcophagus.vcxproj", "{6F0627D2-B246-4867-87B0-46ABEF8EA3BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{11971E47-A627-4BDF-8EFB-0C9A810BF01E} = {11971E47-A627-4BDF-8EFB-0C9A810BF01E}
+		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374} = {A15FAEF2-C95B-42B8-A6ED-19FC4B910374}
+		{AE3917D2-5092-407C-A28F-FF20775054E5} = {AE3917D2-5092-407C-A28F-FF20775054E5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enginema", "Cryptoengines\enginema\enginema.vcxproj", "{AE3917D2-5092-407C-A28F-FF20775054E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374} = {A15FAEF2-C95B-42B8-A6ED-19FC4B910374}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cryptoengines", "Cryptoengines", "{3CDF55B5-49DC-40C1-BAA5-0C541B1AF726}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptoengine_abstracts", "Cryptoengines\cryptoengine_abstracts\cryptoengine_abstracts.vcxproj", "{A15FAEF2-C95B-42B8-A6ED-19FC4B910374}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aes_cryptor", "Cryptoengines\aes_cryptor\aes_cryptor.vcxproj", "{11971E47-A627-4BDF-8EFB-0C9A810BF01E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A15FAEF2-C95B-42B8-A6ED-19FC4B910374} = {A15FAEF2-C95B-42B8-A6ED-19FC4B910374}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
