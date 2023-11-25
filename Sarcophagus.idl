@@ -26,6 +26,7 @@ namespace Sarcophagus
 
 		Boolean IsDirty{ get; };
 		Microsoft.UI.Xaml.Visibility IsDirtyVisibility;
+		Windows.Storage.StorageFile FileToSave;
 	}
 
 	runtimeclass DecisionBox
@@ -130,6 +131,12 @@ namespace Sarcophagus
 	}
 
 	[default_interface]
+	runtimeclass ChooseCryptoengineToSaveFileAsCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		ChooseCryptoengineToSaveFileAsCommand();
+	}
+
+	[default_interface]
 	runtimeclass NewFileCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		NewFileCommand();
@@ -147,6 +154,13 @@ namespace Sarcophagus
 	runtimeclass SaveFileCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		SaveFileCommand();
+		Int64 WindowHandle{ get; set; };
+	}
+
+	[default_interface]
+	runtimeclass SaveFileAsCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		SaveFileAsCommand();
 		Int64 WindowHandle{ get; set; };
 	}
 
@@ -217,6 +231,8 @@ namespace Sarcophagus
 		OpenFileCommand OpenFileCommand{ get; };
 		ChooseCryptoengineToSaveFileCommand ChooseCryptoengineToSaveFileCommand{ get; };
 		SaveFileCommand SaveFileCommand{ get; };
+		ChooseCryptoengineToSaveFileAsCommand ChooseCryptoengineToSaveFileAsCommand{ get; };
+		SaveFileAsCommand SaveFileAsCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
 	}
@@ -236,7 +252,8 @@ namespace Sarcophagus
 	enum ChooseCryptoengineTarget
 	{
 		NewFile, 
-		SaveFile
+		SaveFile,
+		SaveFileAs
 	};
 
 	runtimeclass ChooseCryptoengineVM

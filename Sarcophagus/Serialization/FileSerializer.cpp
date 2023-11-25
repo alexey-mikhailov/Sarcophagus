@@ -15,6 +15,7 @@ namespace winrt::Sarcophagus::implementation
 {
 	FileSerializer::FileSerializer()
 		: _currentVersion(0x00'00'00'02ui32)
+		, _fileToSave(nullptr)
 	{
 		// Change current version in member initializer. 
 	}

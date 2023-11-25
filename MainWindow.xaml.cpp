@@ -68,6 +68,7 @@ namespace winrt::Sarcophagus::implementation
 			_vm.NewFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 			_vm.OpenFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 			_vm.SaveFileCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
+			_vm.SaveFileAsCommand().WindowHandle(reinterpret_cast<int64_t>(hWnd));
 		}
 
 		// Subscribe

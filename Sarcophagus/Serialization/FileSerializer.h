@@ -27,9 +27,6 @@ namespace winrt::Sarcophagus::implementation
         uint64_t GetStorageKeyBuff() const { return reinterpret_cast<uint64_t>(_storageKeyBuff); }
         void SetStorageKey(uint64_t size, uint64_t buff);
 
-        bool IsDirty() const { return _isDirty; }
-        Visibility IsDirtyVisibility() const { return _isDirty ? Visibility::Visible : Visibility::Collapsed; }
-        void IsDirtyVisibility(Visibility value) { _isDirty = value == Visibility::Visible; }
         void MakeDirty();
         void ClearDirty();
 
@@ -45,11 +42,18 @@ namespace winrt::Sarcophagus::implementation
         winrt::event_token PropertyChanged(PropertyChangedEventHandler const& value);
         void PropertyChanged(const winrt::event_token& token);
 
+        bool IsDirty() const { return _isDirty; }
+        Visibility IsDirtyVisibility() const { return _isDirty ? Visibility::Visible : Visibility::Collapsed; }
+        void IsDirtyVisibility(Visibility value) { _isDirty = value == Visibility::Visible; }
+        StorageFile FileToSave() { return _fileToSave; }
+        void FileToSave(StorageFile fileToSave) { _fileToSave = fileToSave; }
+
     private:
-        bool _isDirty;
-        uint32_t _currentVersion;
-        uint64_t _storageKeySize;
-        uint8_t* _storageKeyBuff;
+        bool _isDirty = false;
+        StorageFile _fileToSave;
+        uint32_t _currentVersion = 0;
+        uint64_t _storageKeySize = 0;
+        uint8_t* _storageKeyBuff = nullptr;
         std::unordered_map <uint32_t, std::shared_ptr<::Sarcophagus::FileProtocol>> _protocols;
         winrt::event<PropertyChangedEventHandler> _propertyChanged;
     };

@@ -161,6 +161,11 @@ namespace winrt::Sarcophagus::implementation
 				Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
 				mainVM.SaveFileCommand().Execute(nullptr);
 			}
+			else if (::Sarcophagus::ViewModelHub::GetInstance().ChooseCryptoengineVM().Target() == ChooseCryptoengineTarget::SaveFileAs)
+			{
+				Sarcophagus::MainVM mainVM = ::Sarcophagus::ViewModelHub::GetInstance().MainVM();
+				mainVM.SaveFileAsCommand().Execute(nullptr);
+			}
 		}
 	}
 }

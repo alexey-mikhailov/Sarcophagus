@@ -93,6 +93,8 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::OpenFileCommand OpenFileCommand() const { return _openFileCommand; }
 		Sarcophagus::ChooseCryptoengineToSaveFileCommand ChooseCryptoengineToSaveFileCommand() const { return _chooseCryptoengineToSaveFileCommand; }
 		Sarcophagus::SaveFileCommand SaveFileCommand() const { return _saveFileCommand; }
+		Sarcophagus::ChooseCryptoengineToSaveFileAsCommand ChooseCryptoengineToSaveFileAsCommand() const { return _chooseCryptoengineToSaveFileAsCommand; }
+		Sarcophagus::SaveFileAsCommand SaveFileAsCommand() const { return _saveFileAsCommand; }
 
 	private:
 		Sarcophagus::PageId _pageId = Sarcophagus::PageId::ChooseCryptoengine;
@@ -112,6 +114,8 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::OpenFileCommand _openFileCommand;
 		Sarcophagus::ChooseCryptoengineToSaveFileCommand _chooseCryptoengineToSaveFileCommand;
 		Sarcophagus::SaveFileCommand _saveFileCommand;
+		Sarcophagus::ChooseCryptoengineToSaveFileAsCommand _chooseCryptoengineToSaveFileAsCommand;
+		Sarcophagus::SaveFileAsCommand _saveFileAsCommand;
 
 		winrt::event<Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> _propertyChanged;
 		winrt::event<PageChangedDelegate> _pageChanged;

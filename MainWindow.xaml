@@ -27,9 +27,26 @@
                 <TextBlock Text="*" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="10" Visibility="{x:Bind FileSerializer.IsDirtyVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <MenuBar VerticalAlignment="Bottom" Margin="0,0,0,0">
                     <MenuBarItem Title="File">
-                        <MenuFlyoutItem Text="New" Command="{x:Bind MainVM.NewFileCommand}" CommandParameter="{x:Bind}" />
-                        <MenuFlyoutItem Text="Open" Command="{x:Bind MainVM.OpenFileCommand}" CommandParameter="{x:Bind}" />
-                        <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.ChooseCryptoengineToSaveFileCommand}" CommandParameter="{x:Bind}" />
+                        <MenuFlyoutItem Text="New" Command="{x:Bind MainVM.NewFileCommand}" CommandParameter="{x:Bind}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control" Key="N" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Open" Command="{x:Bind MainVM.OpenFileCommand}" CommandParameter="{x:Bind}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control" Key="O" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Save" Command="{x:Bind MainVM.ChooseCryptoengineToSaveFileCommand}" CommandParameter="{x:Bind}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control" Key="S" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="SaveAs" Command="{x:Bind MainVM.ChooseCryptoengineToSaveFileAsCommand}" CommandParameter="{x:Bind}">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control,Shift" Key="S" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
                     </MenuBarItem>
                 </MenuBar>
             </StackPanel>
