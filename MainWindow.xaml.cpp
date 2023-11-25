@@ -7,6 +7,7 @@
 #include "ChooseCryptoenginePage.xaml.h"
 #include "CredFolderEditor.xaml.h"
 #include "CredEditor.xaml.h"
+#include "DialogTools.h"
 #include "MainPage.xaml.h"
 #include "resource.h"
 
@@ -143,6 +144,49 @@ namespace winrt::Sarcophagus::implementation
 			}
 		}
 	}
-}
 
+	IAsyncAction MainWindow::OnClosed(IInspectable const&, WindowEventArgs const& args)
+	{
+		if (FileSerializer::GetInstance().IsDirty())
+		{
+			args.Handled(true);
+			bool isSaveNeeded = false;
+			bool isCloseNeeded = false;
+
+			auto decisionBox = ::Sarcophagus::MakeDecisionBox(L"Do you want to save this file?");
+			decisionBox.Button1Handler([&isSaveNeeded](ContentDialog, ContentDialogButtonClickEventArgs)
+			{
+				isSaveNeeded = true;
+			});
+			decisionBox.Button2Handler([&isCloseNeeded](ContentDialog, ContentDialogButtonClickEventArgs)
+			{
+				isCloseNeeded = true;
+			});
+
+			co_await decisionBox.ShowAsync();
+
+			if (isSaveNeeded)
+			{
+				co_await ::Sarcophagus::ViewModelHub::GetInstance().MainVM().SaveFileCommand().ExecuteAsync();
+				Close();
+			}
+			else if (isCloseNeeded)
+			{
+				FileSerializer::GetInstance().ClearDirty();
+				Close();
+			}
+			else
+			{
+				// Async case. 
+				// Cancel button. Do nothing. 
+			}
+		}
+		else
+		{
+			// Immediate case. 
+			// File wasn't dirty. Just close app. 
+			args.Handled(false);
+		}
+	}
+}
 

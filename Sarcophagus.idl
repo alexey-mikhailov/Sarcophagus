@@ -154,6 +154,7 @@ namespace Sarcophagus
 	runtimeclass SaveFileCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		SaveFileCommand();
+		Windows.Foundation.IAsyncAction ExecuteAsync();
 		Int64 WindowHandle{ get; set; };
 	}
 

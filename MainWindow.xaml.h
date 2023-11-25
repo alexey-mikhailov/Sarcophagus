@@ -15,6 +15,7 @@ namespace winrt::Sarcophagus::implementation
 		MainWindow();
 		void OnContentLoaded(IInspectable const& sender, RoutedEventArgs const& args);
 		void OnPageChanged(Sarcophagus::PageId pageId);
+		IAsyncAction OnClosed(IInspectable const& sender, WindowEventArgs const& args);
 
 		Sarcophagus::MainVM MainVM() const { return _vm; }
 		Sarcophagus::FileSerializer FileSerializer() const { return _fileSerializer; }
