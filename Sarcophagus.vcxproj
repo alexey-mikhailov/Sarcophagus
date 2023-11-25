@@ -132,6 +132,7 @@
     <ClInclude Include="FileMenuCommands.h" />
     <ClInclude Include="InternalCryptoTool.h" />
     <ClInclude Include="Native\cryptoselector.h" />
+    <ClInclude Include="Native\ini_reflector.h" />
     <ClInclude Include="Serialization\FileProtocol.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MainPage.xaml.h">
@@ -184,6 +185,7 @@
     <ClCompile Include="FileMenuCommands.cpp" />
     <ClCompile Include="InternalCryptoTool.cpp" />
     <ClCompile Include="Native\cryptoselector.cpp" />
+    <ClCompile Include="Native\ini_reflector.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>

@@ -59,6 +59,9 @@
     <ClCompile Include="Serialization\FileProtocol_0_0_0_2.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
+    <ClCompile Include="Native\ini_reflector.cpp">
+      <Filter>Native</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Serialization\FileProtocol_0_0_0_2.h">
       <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Native\ini_reflector.h">
+      <Filter>Native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
