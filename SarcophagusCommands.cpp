@@ -29,6 +29,9 @@
 #if __has_include("CopyCredentialCommand.g.cpp")
 #include "CopyCredentialCommand.g.cpp"
 #endif
+#if __has_include("ChooseRecentFileCommand.g.cpp")
+#include "ChooseRecentFileCommand.g.cpp"
+#endif
 #if __has_include("ChooseCryptoengineCommand.g.cpp")
 #include "ChooseCryptoengineCommand.g.cpp"
 #endif
@@ -139,6 +142,55 @@ namespace winrt::Sarcophagus::implementation
 			delete pwdBuff;
 
 			winrt::Windows::ApplicationModel::DataTransfer::Clipboard::SetContent(dataPackage);
+		}
+	}
+
+	void ChooseRecentFileCommand::Execute(IInspectable const& parameter)
+	{
+		if (auto recentFile = parameter.try_as<Sarcophagus::RecentFileVM>())
+		{
+			ExecuteAsync(recentFile.File());
+		}
+		else
+		{
+			::Sarcophagus::ShowErrorAsync(L"Could not choose recent file. Bad parameter. ");
+		}
+	}
+
+	IAsyncAction ChooseRecentFileCommand::ExecuteAsync(const winrt::Windows::Storage::StorageFile& file)
+	{
+		winrt::Windows::Storage::StorageFile fileCopy = file;
+		auto decisionResult = co_await ::Sarcophagus::MakePasswordDecisionBox(L"Password", L"Enter file password").ShowAsync();
+		if (decisionResult.Status == PasswordDecisionStatus::Ok)
+		{
+			if (decisionResult.Password.empty())
+			{
+				co_await ::Sarcophagus::ShowErrorAsync(L"Empty password is not allowed. ");
+			}
+			else
+			{
+				uint64_t pwdSize;
+				uint8_t* pwdBuff;
+				const ::Sarcophagus::InternalCryptoTool::EncryptResult result = ::Sarcophagus::InternalCryptoTool::GetInstance().Encrypt
+				(
+					sizeof(winrt::hstring::value_type) * decisionResult.Password.size(),
+					reinterpret_cast<const uint8_t*>(decisionResult.Password.c_str()),
+					&pwdSize,
+					&pwdBuff
+				);
+
+				SARCOPHAGUS_ASSERT(result == ::Sarcophagus::InternalCryptoTool::EncryptResult::Success, NULL, L"Internal encryption failed. ");
+				SARCOPHAGUS_ASSERT(pwdSize % 2 == 0, NULL, L"Encrypted password should be wide string (with even size). ");
+
+				FileSerializer::GetInstance().SetStorageKey(pwdSize, reinterpret_cast<uint64_t>(pwdBuff));
+				delete pwdBuff;
+
+				co_await FileSerializer::GetInstance().OpenFileAsync(fileCopy);
+				FileSerializer::GetInstance().ClearDirty();
+				FileSerializer::GetInstance().FileToSave(fileCopy);
+				::Sarcophagus::ViewModelHub::GetInstance().RecentFilesVM().PushRecentFile(fileCopy);
+				::Sarcophagus::ViewModelHub::GetInstance().MainVM().PageId(PageId::Main);
+			}
 		}
 	}
 

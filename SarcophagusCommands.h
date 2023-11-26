@@ -6,6 +6,7 @@
 #include "RemoveCredentialCommand.g.h"
 #include "EditCredentialCommand.g.h"
 #include "CopyCredentialCommand.g.h"
+#include "ChooseRecentFileCommand.g.h"
 #include "ChooseCryptoengineCommand.g.h"
 
 using namespace winrt::Windows::Foundation;
@@ -96,6 +97,19 @@ namespace winrt::Sarcophagus::implementation
         winrt::event<EventHandler<IInspectable>> _canExecuteChanged;
 	};
 
+	struct ChooseRecentFileCommand : ChooseRecentFileCommandT<ChooseRecentFileCommand>
+    {
+        ChooseRecentFileCommand() = default;
+        winrt::event_token CanExecuteChanged(EventHandler<IInspectable> const& value) { return _canExecuteChanged.add(value); }
+        void CanExecuteChanged(winrt::event_token const& token) { _canExecuteChanged.remove(token); }
+        auto CanExecute(IInspectable const&) { return true; }
+        void Execute(IInspectable const& parameter);
+
+    private:
+        IAsyncAction ExecuteAsync(const winrt::Windows::Storage::StorageFile& file);
+        winrt::event<EventHandler<IInspectable>> _canExecuteChanged;
+	};
+
 	struct ChooseCryptoengineCommand : ChooseCryptoengineCommandT<ChooseCryptoengineCommand>
     {
         ChooseCryptoengineCommand() = default;
@@ -118,5 +132,6 @@ namespace winrt::Sarcophagus::factory_implementation
     struct RemoveCredentialCommand : RemoveCredentialCommandT<RemoveCredentialCommand, implementation::RemoveCredentialCommand> {};
     struct EditCredentialCommand : EditCredentialCommandT<EditCredentialCommand, implementation::EditCredentialCommand> {};
     struct CopyCredentialCommand : CopyCredentialCommandT<CopyCredentialCommand, implementation::CopyCredentialCommand> {};
+    struct ChooseRecentFileCommand : ChooseRecentFileCommandT<ChooseRecentFileCommand, implementation::ChooseRecentFileCommand> {};
     struct ChooseCryptoengineCommand : ChooseCryptoengineCommandT<ChooseCryptoengineCommand, implementation::ChooseCryptoengineCommand> {};
 }

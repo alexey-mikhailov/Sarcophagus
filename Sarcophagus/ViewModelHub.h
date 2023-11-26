@@ -1,6 +1,5 @@
 #pragma once
 #include "MainVM.h"
-#include "ChooseCryptoengineVM.h"
 
 namespace Sarcophagus
 {
@@ -14,6 +13,7 @@ namespace Sarcophagus
 
 		winrt::Sarcophagus::MainVM MainVM() const { return _mainVM; }
 		winrt::Sarcophagus::ChooseCryptoengineVM ChooseCryptoengineVM() const { return _chooseCryptoengineVM; }
+		winrt::Sarcophagus::RecentFilesVM RecentFilesVM() const { return _recentFilesVM; }
 
 	private:
 		ViewModelHub();
@@ -21,5 +21,6 @@ namespace Sarcophagus
 
 		winrt::Sarcophagus::MainVM _mainVM;
 		winrt::Sarcophagus::ChooseCryptoengineVM _chooseCryptoengineVM;
+		winrt::Sarcophagus::RecentFilesVM _recentFilesVM;
 	};
 }

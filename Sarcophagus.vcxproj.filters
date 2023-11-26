@@ -19,6 +19,9 @@
     <Page Include="CredFolderEditor.xaml">
       <Filter>View</Filter>
     </Page>
+    <Page Include="RecentFilesPage.xaml">
+      <Filter>View</Filter>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Sarcophagus.idl" />
@@ -62,6 +65,9 @@
     <ClCompile Include="Native\ini_reflector.cpp">
       <Filter>Native</Filter>
     </ClCompile>
+    <ClCompile Include="RecentFilesVM.cpp">
+      <Filter>ViewModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -103,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Native\ini_reflector.h">
       <Filter>Native</Filter>
+    </ClInclude>
+    <ClInclude Include="RecentFilesVM.h">
+      <Filter>ViewModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

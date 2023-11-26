@@ -157,6 +157,7 @@ namespace winrt::Sarcophagus::implementation
 						co_await FileSerializer::GetInstance().OpenFileAsync(pickedFile);
 						FileSerializer::GetInstance().ClearDirty();
 						FileSerializer::GetInstance().FileToSave(pickedFile);
+						::Sarcophagus::ViewModelHub::GetInstance().RecentFilesVM().PushRecentFile(pickedFile);
 						::Sarcophagus::ViewModelHub::GetInstance().MainVM().PageId(PageId::Main);
 					}
 				}
@@ -237,6 +238,7 @@ namespace winrt::Sarcophagus::implementation
 						co_await FileSerializer::GetInstance().SaveFileAsync(pickedFile);
 						FileSerializer::GetInstance().ClearDirty();
 						FileSerializer::GetInstance().FileToSave(pickedFile);
+						::Sarcophagus::ViewModelHub::GetInstance().RecentFilesVM().PushRecentFile(pickedFile);
 						::Sarcophagus::ViewModelHub::GetInstance().MainVM().PageId(PageId::Main);
 					}
 				}
@@ -307,6 +309,7 @@ namespace winrt::Sarcophagus::implementation
 						co_await FileSerializer::GetInstance().SaveFileAsync(pickedFile);
 						FileSerializer::GetInstance().ClearDirty();
 						FileSerializer::GetInstance().FileToSave(pickedFile);
+						::Sarcophagus::ViewModelHub::GetInstance().RecentFilesVM().PushRecentFile(pickedFile);
 						::Sarcophagus::ViewModelHub::GetInstance().MainVM().PageId(PageId::Main);
 					}
 				}

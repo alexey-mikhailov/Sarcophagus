@@ -97,7 +97,7 @@ namespace winrt::Sarcophagus::implementation
 		Sarcophagus::SaveFileAsCommand SaveFileAsCommand() const { return _saveFileAsCommand; }
 
 	private:
-		Sarcophagus::PageId _pageId = Sarcophagus::PageId::ChooseCryptoengine;
+		Sarcophagus::PageId _pageId = Sarcophagus::PageId::RecentFiles;
 		Sarcophagus::CredFolder _selectedCredFolder = nullptr;
 		IObservableVector<Sarcophagus::CredFolder> _credFolders;
 		Sarcophagus::Credential _credentialTemplate = nullptr;

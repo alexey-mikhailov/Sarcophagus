@@ -133,6 +133,11 @@
     <ClInclude Include="InternalCryptoTool.h" />
     <ClInclude Include="Native\cryptoselector.h" />
     <ClInclude Include="Native\ini_reflector.h" />
+    <ClInclude Include="RecentFilesPage.xaml.h">
+      <DependentUpon>RecentFilesPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="RecentFilesVM.h" />
     <ClInclude Include="Serialization\FileProtocol.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MainPage.xaml.h">
@@ -167,6 +172,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml" />
+    <Page Include="RecentFilesPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChooseCryptoenginePage.xaml.cpp">
@@ -186,6 +194,11 @@
     <ClCompile Include="InternalCryptoTool.cpp" />
     <ClCompile Include="Native\cryptoselector.cpp" />
     <ClCompile Include="Native\ini_reflector.cpp" />
+    <ClCompile Include="RecentFilesPage.xaml.cpp">
+      <DependentUpon>RecentFilesPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="RecentFilesVM.cpp" />
     <ClCompile Include="SarcophagusCommands.cpp" />
     <ClCompile Include="MainPage.xaml.cpp">
       <DependentUpon>MainPage.xaml</DependentUpon>

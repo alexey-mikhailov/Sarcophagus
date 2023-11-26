@@ -166,6 +166,12 @@ namespace Sarcophagus
 	}
 
 	[default_interface]
+	runtimeclass ChooseRecentFileCommand : Microsoft.UI.Xaml.Input.ICommand
+	{
+		ChooseRecentFileCommand();
+	}
+
+	[default_interface]
 	runtimeclass ChooseCryptoengineCommand : Microsoft.UI.Xaml.Input.ICommand
 	{
 		ChooseCryptoengineCommand();
@@ -204,9 +210,10 @@ namespace Sarcophagus
 	enum PageId
 	{
 		Main,
+		RecentFiles,
+		ChooseCryptoengine,
 		EditCredFolder,
 		EditCredential,
-		ChooseCryptoengine,
 	};
 
 	runtimeclass MainVM : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
@@ -236,6 +243,25 @@ namespace Sarcophagus
 		SaveFileAsCommand SaveFileAsCommand{ get; };
 
 		event PageChangedDelegate PageChanged;
+	}
+
+	runtimeclass RecentFileVM : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		RecentFileVM(String name, Windows.Storage.StorageFile file);
+
+		RecentFilesVM RecentFilesVM{ get; };
+		String Name{ get; };
+		Windows.Storage.StorageFile File{ get; };
+	}
+
+	runtimeclass RecentFilesVM
+	{
+		RecentFilesVM();
+		void PushRecentFile(Windows.Storage.StorageFile file);
+		void WriteIni();
+
+		Windows.Foundation.Collections.IObservableVector<RecentFileVM> RecentFiles{ get; };
+		ChooseRecentFileCommand ChooseRecentFileCommand{ get; };
 	}
 
 	runtimeclass CryptoengineVM : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
@@ -283,6 +309,13 @@ namespace Sarcophagus
 		FileSerializer FileSerializer{ get; };
 	}
 
+	[default_interface]
+	runtimeclass RecentFilesPage : Microsoft.UI.Xaml.Controls.Page
+	{
+		RecentFilesPage();
+		RecentFilesVM RecentFilesVM{ get; };
+	}
+	
 	[default_interface]
 	runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page
 	{

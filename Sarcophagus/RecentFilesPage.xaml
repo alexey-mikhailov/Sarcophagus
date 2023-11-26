@@ -1,0 +1,38 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Page
+    x:Class="Sarcophagus.RecentFilesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sarcophagus"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" 
+                      VerticalScrollBarVisibility="Visible">
+            <ItemsControl x:Name="ItemsControlEngines" ItemsSource="{x:Bind RecentFilesVM.RecentFiles}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Background="#1f000000"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="local:RecentFileVM">
+                        <Border Padding="3">
+                            <Button Command="{x:Bind RecentFilesVM.ChooseRecentFileCommand}" 
+                                    CommandParameter="{x:Bind}"
+                                    Background="#1f000000" 
+                                    Padding="2" 
+                                    HorizontalAlignment="Stretch">
+                                <TextBlock Text="{x:Bind Name}" Foreground="#bfbfbf" Padding="3" VerticalAlignment="Center"/>
+                            </Button>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -6,6 +6,7 @@
 
 #include "ChooseCryptoenginePage.xaml.h"
 #include "CredFolderEditor.xaml.h"
+#include "RecentFilesPage.xaml.h"
 #include "CredEditor.xaml.h"
 #include "DialogTools.h"
 #include "MainPage.xaml.h"
@@ -76,7 +77,7 @@ namespace winrt::Sarcophagus::implementation
 		_vm.PageChanged(PageChangedDelegate(this, &MainWindow::OnPageChanged));
 
 		// And invoke immediately (init)
-		OnPageChanged(PageId::ChooseCryptoengine);
+		OnPageChanged(PageId::RecentFiles);
 	}
 
 	void MainWindow::OnContentLoaded(IInspectable const&, RoutedEventArgs const&)
@@ -96,6 +97,20 @@ namespace winrt::Sarcophagus::implementation
 			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::MainPage>()))
 			{
 				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::MainPage>())
+				{
+					page->Init();
+				}
+			}
+		}
+		else if (pageId == PageId::RecentFiles)
+		{
+			// Change breadcrumb bar content. 
+			BreadcrumbBar().ItemsSource(winrt::single_threaded_observable_vector<hstring>({ L"Main", L"Recent files" }));
+
+			// Navigate to new frame
+			if (HostedPageFrame().Navigate(xaml_typename<Sarcophagus::RecentFilesPage>()))
+			{
+				if (const auto page = HostedPageFrame().Content().try_as<Sarcophagus::implementation::RecentFilesPage>())
 				{
 					page->Init();
 				}
